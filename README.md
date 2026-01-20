@@ -1,59 +1,269 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🛡️ Life Vest Tracker - GMF AeroAsia
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi pelacakan tanggal kedaluwarsa life vest untuk armada pesawat GMF AeroAsia.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 📋 Daftar Isi
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- [Cara Menjalankan](#-cara-menjalankan)
+- [Panduan Penggunaan](#-panduan-penggunaan)
+- [Keyboard Shortcuts](#-keyboard-shortcuts)
+- [Menambahkan Pesawat Baru](#-menambahkan-pesawat-baru)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🚀 Cara Menjalankan
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### Prasyarat
+- PHP 8.1+
+- Composer
+- Node.js & npm
+- MySQL/MariaDB (via Laragon/XAMPP)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Langkah-langkah
 
-## Laravel Sponsors
+```bash
+# 1. Install dependencies
+composer install
+npm install
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+# 2. Setup database
+cp .env.example .env
+php artisan key:generate
 
-### Premium Partners
+# 3. Edit .env - sesuaikan database
+DB_DATABASE=lifevest_tracker
+DB_USERNAME=root
+DB_PASSWORD=
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+# 4. Jalankan migration
+php artisan migrate
 
-## Contributing
+# 5. Jalankan server (buka 2 terminal)
+# Terminal 1:
+php artisan serve
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# Terminal 2:
+npm run dev
+```
 
-## Code of Conduct
+Buka http://localhost:8000
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 📖 Panduan Penggunaan
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Dashboard
+- Menampilkan **Fleet Overview** (ringkasan status semua pesawat)
+- Menampilkan **Fleet Status** per tipe (B737, B777, A330)
+- Klik kartu pesawat untuk masuk ke halaman seat map
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 🖱️ SELECT KURSI
+
+| Aksi | Fungsi |
+|------|--------|
+| **Klik biasa** | Pilih 1 kursi (hapus selection sebelumnya) |
+| **Ctrl + Klik** | Tambah kursi ke selection (multi-select) |
+| **Shift + Klik** | Pilih range dari kursi terakhir ke kursi ini |
+| **Klik nomor BARIS** | Pilih semua kursi di baris tersebut |
+| **Klik huruf KOLOM** | Pilih semua kursi di kolom tersebut |
+
+---
+
+## ❌ UNSELECT / HAPUS SELECTION
+
+| Aksi | Fungsi |
+|------|--------|
+| **Klik area kosong** | Hapus semua selection |
+| **Tekan ESC** | Hapus semua selection |
+| **Ctrl + Klik kursi** | Hapus kursi dari selection (toggle) |
+| **Klik "Clear Selection"** | Hapus semua selection |
+
+---
+
+## � SET TANGGAL EXPIRY
+
+1. Pilih kursi yang ingin di-update (bisa multi-select)
+2. Klik tombol **"Set Date"** di toolbar
+3. Pilih tanggal expiry life vest dari calendar
+4. Klik **"Apply"** untuk menyimpan
+
+> 💡 **Catatan:** Bisa update banyak kursi sekaligus!
+
+---
+
+## ⌨️ KEYBOARD SHORTCUTS
+
+| Shortcut | Fungsi |
+|----------|--------|
+| **Ctrl + A** | Pilih SEMUA kursi |
+| **Enter** | Buka dialog Set Date (jika ada kursi terpilih) |
+| **Escape (ESC)** | Tutup dialog / Hapus selection |
+
+---
+
+## 🎨 ARTI WARNA STATUS
+
+| Warna | Status | Keterangan |
+|-------|--------|------------|
+| 🟢 **HIJAU** | Safe | Expiry > 6 bulan lagi |
+| 🟡 **KUNING** | Warning | Expiry 3-6 bulan lagi |
+| 🔴 **MERAH** | Critical | Expiry < 3 bulan lagi |
+| 🟣 **UNGU** | Expired | Sudah melewati tanggal expiry |
+| ⚪ **ABU-ABU** | No Data | Belum ada tanggal expiry |
+
+---
+
+## ✈️ Menambahkan Pesawat Baru
+
+### Langkah 1: Tambah Config
+📁 **File:** `config/aircraft_layouts.php`
+
+```php
+return [
+    // ... pesawat lain ...
+
+    'PK-XXX' => [
+        'type' => 'A330-300',  // Tipe pesawat
+        'icon' => '🛩️',        // Icon (emoji)
+    ],
+];
+```
+
+### Langkah 2: Buat Template Blade
+📁 **File:** `resources/views/aircraft/a330-xxx.blade.php`
+
+Copy dari template yang mirip (misal `a330-gpz.blade.php`) lalu edit:
+
+1. **Ganti tipe pesawat di header:**
+```blade
+<span class="info-value">A330-300</span>
+```
+
+2. **Sesuaikan section class (Business/Economy):**
+```blade
+<!-- Business Class - Rows 6-11 -->
+<section class="cabin-section">
+    <h2>💼 Business Class - Rows 6-11</h2>
+    ...
+</section>
+
+<!-- Economy Class - Rows 21-50 -->
+<section class="cabin-section">
+    <h2>🪑 Economy Class - Rows 21-50</h2>
+    ...
+</section>
+```
+
+3. **Sesuaikan baris dan kolom:**
+```blade
+@foreach([6, 7, 8, 9, 10, 11] as $row)
+    <!-- render seats -->
+@endforeach
+```
+
+4. **Untuk skip baris tertentu:**
+```blade
+@if($row == 24)
+    @continue
+@endif
+```
+
+5. **Untuk kolom berbeda per baris:**
+```blade
+@php
+    if ($row == 55) {
+        $rowCols = ['D', 'F', 'G'];  // Hanya 3 kursi
+    } else {
+        $rowCols = ['A', 'C', 'D', 'E', 'F', 'G', 'H', 'K'];
+    }
+@endphp
+```
+
+### Langkah 3: Update Routing Controller
+📁 **File:** `app/Http/Controllers/AircraftController.php`
+
+```php
+$template = match ($registration) {
+    'PK-GFD' => 'aircraft.b737',
+    'PK-GIA' => 'aircraft.b777-gia',
+    'PK-GIF' => 'aircraft.b777-gif',
+    'PK-GHE' => 'aircraft.a330',
+    'PK-GPZ' => 'aircraft.a330-gpz',
+    'PK-XXX' => 'aircraft.a330-xxx',  // ← Tambahkan ini
+    default => 'aircraft.show',
+};
+```
+
+### Langkah 4: Pastikan Template Memiliki Script Config
+Di bagian akhir template, pastikan ada:
+
+```blade
+@push('scripts')
+    <script>
+        window.AIRCRAFT_CONFIG = {
+            registration: '{{ $registration }}',
+            updateUrl: '{{ route('aircraft.updateSeats', $registration) }}',
+            csrfToken: '{{ csrf_token() }}'
+        };
+    </script>
+@endpush
+```
+
+### Langkah 5: Test
+1. Refresh browser
+2. Buka dashboard - pesawat baru muncul di fleet
+3. Klik pesawat baru - pastikan seat map tampil
+4. Test select kursi dan set tanggal
+
+---
+
+## 📁 Struktur File Penting
+
+```
+lifevest-laravel/
+├── config/
+│   └── aircraft_layouts.php      # Config registrasi pesawat
+├── app/Http/Controllers/
+│   ├── DashboardController.php   # Logic dashboard
+│   └── AircraftController.php    # Logic seat map & routing
+├── resources/views/
+│   ├── layouts/app.blade.php     # Master layout
+│   ├── dashboard.blade.php       # Halaman dashboard
+│   ├── aircraft/
+│   │   ├── b737.blade.php        # Template B737 (PK-GFD)
+│   │   ├── b777-gia.blade.php    # Template B777 (PK-GIA)
+│   │   ├── b777-gif.blade.php    # Template B777 (PK-GIF)
+│   │   ├── a330.blade.php        # Template A330-900 (PK-GHE)
+│   │   └── a330-gpz.blade.php    # Template A330-300 (PK-GPZ)
+│   └── components/
+│       ├── cockpit-section.blade.php  # Komponen cockpit (reusable)
+│       ├── seat-cell.blade.php        # Komponen 1 kursi
+│       ├── toolbar.blade.php          # Toolbar selection
+│       ├── status-legend.blade.php    # Legend warna
+│       └── date-modal.blade.php       # Modal input tanggal
+└── resources/
+    ├── css/
+    │   ├── style.css             # CSS global
+    │   └── dashboard.css         # CSS dashboard
+    └── js/
+        └── app.js                # JavaScript interaksi
+```
+
+---
+
+## 🛠️ Teknologi
+
+- **Backend:** Laravel 11
+- **Frontend:** Vanilla CSS & JavaScript
+- **Database:** MySQL
+- **Build Tool:** Vite
+
+---
+
+## 📞 Kontak
+
+Untuk pertanyaan atau bantuan, hubungi tim IT GMF AeroAsia.

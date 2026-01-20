@@ -165,5 +165,15 @@
     </section>
 
     <!-- Date Modal -->
-    <x-date-modal />
+    @include('components.date-modal')
 @endsection
+
+@push('scripts')
+    <script>
+        window.AIRCRAFT_CONFIG = {
+            registration: '{{ $registration }}',
+            updateUrl: '{{ route('aircraft.updateSeats', $registration) }}',
+            csrfToken: '{{ csrf_token() }}'
+        };
+    </script>
+@endpush
