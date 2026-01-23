@@ -3,7 +3,7 @@
 @section('header-right')
     <div class="aircraft-info">
         <label>Tipe:</label>
-        <span class="info-value">A330-900</span>
+        <span class="info-value">{{ config('aircraft_layouts.' . $registration . '.type', 'A330-900') }}</span>
     </div>
     <div class="aircraft-info">
         <label>Registrasi:</label>

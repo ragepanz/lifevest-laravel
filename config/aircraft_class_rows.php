@@ -60,6 +60,10 @@ return [
         'business' => range(6, 11),
         'economy' => array_diff(range(21, 49), [24]),
     ],
+    // A330-300 Layout C (All Economy, rows 21-70)
+    'a330-300c' => [
+        'economy' => array_diff(range(21, 70), [24]),
+    ],
 
     // ═══════════════════════════════════════════════════════════
     // A330-200 Layouts
@@ -67,5 +71,9 @@ return [
     'a330-200a' => [
         'business' => range(6, 8),
         'economy' => array_diff(range(21, 52), [24]),
+    ],
+    'a330-200b' => [
+        'business' => range(6, 11),
+        'economy' => array_diff(range(21, 45), [24]),
     ],
 ];

@@ -21,9 +21,9 @@
     <!-- Cockpit Section -->
     <x-cockpit-section :seats="$seats" />
 
-    <!-- Business Class - Rows 6-8 (2-2-2 layout: A C - D G - H K) -->
+    <!-- Business Class - Rows 6-11 (2-2-2 layout: A C - D G - H K) -->
     <section class="cabin-section">
-        <h2>💼 Business Class - Rows 6-8</h2>
+        <h2>💼 Business Class - Rows 6-11</h2>
         <div class="seat-grid">
             <div class="grid-header grid-row-2-2-2">
                 <span class="col-label col-header" data-col="A">A</span>
@@ -35,7 +35,7 @@
                 <span class="col-label col-header" data-col="H">H</span>
                 <span class="col-label col-header" data-col="K">K</span>
             </div>
-            @foreach(range(6, 8) as $row)
+            @foreach(range(6, 11) as $row)
                 @php
                     $rowCols = ['A', 'C', 'D', 'G', 'H', 'K'];
                 @endphp
@@ -56,9 +56,9 @@
         </div>
     </section>
 
-    <!-- Economy Class - Rows 21-38 (2-4-2 layout, skip row 24) -->
+    <!-- Economy Class - Rows 21-31 (2-4-2 layout, skip row 24) -->
     <section class="cabin-section">
-        <h2>🪑 Economy Class - Rows 21-38</h2>
+        <h2>🪑 Economy Class - Rows 21-31</h2>
         <div class="seat-grid">
             <div class="grid-header grid-row-2-4-2">
                 <span class="col-label col-header" data-col="A">A</span>
@@ -72,7 +72,7 @@
                 <span class="col-label col-header" data-col="H">H</span>
                 <span class="col-label col-header" data-col="K">K</span>
             </div>
-            @foreach(range(21, 38) as $row)
+            @foreach(range(21, 31) as $row)
                 @if($row == 24)
                     @continue
                 @endif
@@ -96,9 +96,9 @@
         </div>
     </section>
 
-    <!-- Economy Class - Rows 39-52 (2-4-2 layout with tail exceptions) -->
+    <!-- Economy Class - Rows 32-45 (2-4-2 layout with tail exceptions) -->
     <section class="cabin-section">
-        <h2>🪑 Economy Class - Rows 39-52</h2>
+        <h2>🪑 Economy Class - Rows 32-45</h2>
         <div class="seat-grid">
             <div class="grid-header grid-row-2-4-2">
                 <span class="col-label col-header" data-col="A">A</span>
@@ -114,13 +114,13 @@
             </div>
             @php
                 $exceptions = [
-                    49 => ['A', 'C', 'D', 'F', 'G', 'H', 'K'],
-                    50 => ['A', 'C', 'D', 'F', 'G', 'H', 'K'],
-                    51 => ['A', 'C', 'D', 'F', 'G', 'H', 'K'],
-                    52 => ['A', 'C', 'D', 'F', 'G'],
+                    42 => ['A', 'C', 'D', 'E', 'G', 'H', 'K'],
+                    43 => ['A', 'C', 'D', 'E', 'G', 'H', 'K'],
+                    44 => ['A', 'C', 'D', 'E', 'G', 'H', 'K'],
+                    45 => ['A', 'C', 'D', 'E', 'G'],
                 ];
             @endphp
-            @foreach(range(39, 52) as $row)
+            @foreach(range(32, 45) as $row)
                 @php
                     $rowCols = $exceptions[$row] ?? ['A', 'C', 'D', 'E', 'F', 'G', 'H', 'K'];
                 @endphp

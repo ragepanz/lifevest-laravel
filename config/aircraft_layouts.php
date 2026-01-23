@@ -206,6 +206,26 @@ return [
         'icon' => '✈️',
         'layout' => 'b737-e46',
     ],
+    'PK-GMC' => [
+        'type' => 'B737-800',
+        'icon' => '✈️',
+        'layout' => 'b737-e46',
+    ],
+    'PK-GMI' => [
+        'type' => 'B737-800',
+        'icon' => '✈️',
+        'layout' => 'b737-e46',
+    ],
+    'PK-GFV' => [
+        'type' => 'B737-800',
+        'icon' => '✈️',
+        'layout' => 'b737-e46',
+    ],
+    'PK-GUF' => [
+        'type' => 'B737-800',
+        'icon' => '✈️',
+        'layout' => 'b737-e46',
+    ],
     'PK-GDC' => [
         'type' => 'B737 MAX 8',
         'icon' => '✈️',
@@ -352,6 +372,43 @@ return [
         'icon' => '🛩️',
         'layout' => 'a330-300b',
     ],
+    'PK-GPR' => [
+        'type' => 'A330-300',
+        'icon' => '🛩️',
+        'layout' => 'a330-300b',
+    ],
+    'PK-GPT' => [
+        'type' => 'A330-300',
+        'icon' => '🛩️',
+        'layout' => 'a330-300b',
+    ],
+    'PK-GPX' => [
+        'type' => 'A330-300',
+        'icon' => '🛩️',
+        'layout' => 'a330-300b',
+    ],
+    // A330-300 Layout C (All Economy, rows 21-70)
+    'PK-GPC' => [
+        'type' => 'A330-300',
+        'icon' => '🛩️',
+        'layout' => 'a330-300c',
+    ],
+    'PK-GPG' => [
+        'type' => 'A330-300',
+        'icon' => '🛩️',
+        'layout' => 'a330-300c',
+    ],
+    // A330-341 (same layout as a330-300c)
+    'PK-GPE' => [
+        'type' => 'A330-341',
+        'icon' => '🛩️',
+        'layout' => 'a330-300c',
+    ],
+    'PK-GPF' => [
+        'type' => 'A330-341',
+        'icon' => '🛩️',
+        'layout' => 'a330-300c',
+    ],
 
     // ═══════════════════════════════════════════════════════════
     // A330-200 Fleet
@@ -365,5 +422,21 @@ return [
         'type' => 'A330-200',
         'icon' => '🛩️',
         'layout' => 'a330-200a',
+    ],
+    // A330-200 Layout B (Business 6-11, Economy 21-45)
+    'PK-GPQ' => [
+        'type' => 'A330-200',
+        'icon' => '🛩️',
+        'layout' => 'a330-200b',
+    ],
+    'PK-GPS' => [
+        'type' => 'A330-200',
+        'icon' => '🛩️',
+        'layout' => 'a330-200b',
+    ],
+    'PK-GPL' => [
+        'type' => 'A330-200',
+        'icon' => '🛩️',
+        'layout' => 'a330-200b',
     ],
 ];

@@ -77,15 +77,21 @@ body {
 /* ========================================
    NAVBAR (Sticky)
    ======================================== */
+/* ========================================
+   NAVBAR (Sticky)
+   ======================================== */
 .navbar {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 1000;
-    background: var(--bg-card);
-    border-bottom: 1px solid var(--border);
-    box-shadow: var(--shadow-md);
+    background: rgba(30, 41, 59, 0.85); /* Glassmorphism base */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(71, 85, 105, 0.5);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    transition: all var(--transition-normal);
 }
 
 .navbar-container {
@@ -94,7 +100,8 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: var(--spacing-md) var(--spacing-lg);
+    padding: 0 var(--spacing-lg);
+    height: 70px;
     gap: var(--spacing-md);
 }
 
@@ -102,6 +109,7 @@ body {
     height: 70px;
 }
 
+/* Left Section */
 .navbar-left {
     display: flex;
     align-items: center;
@@ -113,60 +121,74 @@ body {
     align-items: center;
     gap: var(--spacing-sm);
     text-decoration: none;
+    transition: opacity var(--transition-fast);
+}
+
+.navbar-brand:hover {
+    opacity: 0.9;
 }
 
 .navbar-logo {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
 }
 
 .navbar-title {
     font-size: 1.25rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, var(--primary-light), var(--primary));
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 50%, #0284c7 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    text-shadow: 0 2px 10px rgba(14, 165, 233, 0.15);
 }
 
 .navbar-badge {
-    padding: var(--spacing-xs) var(--spacing-sm);
+    padding: 4px 10px;
     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     color: white;
-    font-size: 0.7rem;
-    font-weight: 600;
-    border-radius: 20px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    border-radius: 9999px; /* Pill shape */
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
+    box-shadow: 0 2px 5px rgba(14, 165, 233, 0.4);
+    border: 1px solid rgba(255,255,255,0.1);
 }
 
+/* Center Section */
 .navbar-center {
     display: flex;
     align-items: center;
     gap: var(--spacing-md);
     flex: 1;
     justify-content: center;
-    max-width: 500px;
+    max-width: 600px;
 }
 
 .navbar-search {
     display: flex;
     align-items: center;
     gap: var(--spacing-sm);
-    background: var(--bg-dark);
+    background: rgba(15, 23, 42, 0.6);
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
-    padding: var(--spacing-xs) var(--spacing-md);
+    padding: 8px 16px;
     flex: 1;
     transition: all var(--transition-fast);
 }
 
 .navbar-search:focus-within {
     border-color: var(--primary);
-    box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.2);
+    background: rgba(15, 23, 42, 0.9);
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+    transform: translateY(-1px);
 }
 
 .navbar-search .search-icon {
     color: var(--text-muted);
+    font-size: 0.9rem;
 }
 
 .navbar-search input {
@@ -183,86 +205,84 @@ body {
 }
 
 .navbar-filter select {
-    background: var(--bg-dark);
+    background: rgba(15, 23, 42, 0.6);
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
     color: var(--text-primary);
-    padding: var(--spacing-xs) var(--spacing-md);
+    padding: 8px 16px;
     font-size: 0.9rem;
     cursor: pointer;
     outline: none;
     transition: all var(--transition-fast);
 }
 
-.navbar-filter select:focus {
-    border-color: var(--primary);
+.navbar-filter select:hover {
+    background: rgba(15, 23, 42, 0.8);
+    border-color: var(--text-secondary);
 }
 
+.navbar-filter select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+}
+
+/* Right Section */
 .navbar-right {
     display: flex;
     align-items: center;
-    gap: var(--spacing-md);
 }
 
 .navbar-update {
     display: flex;
     align-items: center;
-    gap: var(--spacing-xs);
-    font-size: 0.85rem;
+    gap: 8px;
+    padding: 6px 12px;
+    background: rgba(30, 41, 59, 0.5);
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(255,255,255,0.05);
 }
 
-.navbar-update .update-label {
+.update-label {
     color: var(--text-muted);
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
-.navbar-update .update-value {
+.update-value {
     color: var(--primary-light);
-    font-weight: 500;
-}
-
-.navbar-home {
-    padding: var(--spacing-xs) var(--spacing-md);
-    background: transparent;
-    border: 1px solid var(--primary);
-    color: var(--primary);
-    border-radius: var(--radius-md);
-    text-decoration: none;
+    font-weight: 600;
     font-size: 0.85rem;
-    transition: all var(--transition-fast);
+    font-family: 'JetBrains Mono', monospace; /* Monospace for time */
 }
 
-.navbar-home:hover {
-    background: var(--primary);
-    color: white;
-}
-
-/* Responsive navbar */
-@media (max-width: 900px) {
-    .navbar-container {
-        flex-wrap: wrap;
-    }
-    .navbar-center {
-        order: 3;
-        width: 100%;
-        max-width: none;
-        margin-top: var(--spacing-sm);
-    }
-    .navbar-spacer {
-        height: 110px;
-    }
-}
-
-@media (max-width: 600px) {
+/* Responsive adjustments */
+@media (max-width: 768px) {
     .navbar-title {
-        display: none;
+        display: none; /* Hide title on mobile to save space */
     }
-    .navbar-badge {
-        display: none;
+    
+    .navbar-container {
+        padding: 0 var(--spacing-sm);
+        gap: var(--spacing-sm);
     }
-    .navbar-update .update-label {
-        display: none;
+    
+    .navbar-search {
+        padding: 6px 10px;
+    }
+    
+    .navbar-filter select {
+        padding: 6px 10px;
+        max-width: 120px;
+    }
+    
+    .update-label {
+        display: none; /* Hide label "Last Update" on mobile */
     }
 }
+
+
 
 /* ========================================
    TOOLBAR

@@ -3,7 +3,7 @@
 @section('header-right')
     <div class="aircraft-info">
         <label>Tipe:</label>
-        <span class="info-value">B737-800</span>
+        <span class="info-value">{{ config('aircraft_layouts.' . $registration . '.type', 'B737-800') }}</span>
     </div>
     <div class="aircraft-info">
         <label>Registrasi:</label>
@@ -63,7 +63,7 @@
                 @if($row == 24)
                     @continue
                 @endif
-                        <div class="seat-row grid-row-3-3" data-row="{{ $row }}">
+                <div class="seat-row grid-row-3-3" data-row="{{ $row }}">
                     @foreach(['A', 'B', 'C'] as $col)
                         @include('components.seat-cell', ['row' => $row, 'col' => $col, 'rowCols' => ['A', 'B', 'C', 'H', 'J', 'K'], 'seats' => $seats])
                     @endforeach
