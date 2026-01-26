@@ -9,7 +9,10 @@ class DashboardController extends Controller
 {
     public function __invoke()
     {
-        $layouts = config('aircraft_layouts');
+        // OLD: $layouts = config('aircraft_layouts');
+        // Load from Database (All status: active & prolong)
+        $aircrafts = \App\Models\Aircraft::all();
+
         $fleet = [];
         $totalStats = [
             'safe' => 0,
@@ -19,7 +22,8 @@ class DashboardController extends Controller
             'no_data' => 0,
         ];
 
-        foreach ($layouts as $registration => $layout) {
+        foreach ($aircrafts as $aircraft) {
+            $registration = $aircraft->registration;
             $seats = Seat::where('registration', $registration)->get();
 
             $stats = [
@@ -40,13 +44,19 @@ class DashboardController extends Controller
             $total = array_sum($stats) ?: 1;
             $healthPercent = round(($stats['safe'] / $total) * 100);
 
-            $fleet[$registration] = [
-                'type' => $layout['type'],
-                'registration' => $registration,
-                'icon' => $layout['icon'],
-                'stats' => $stats,
-                'health' => $healthPercent,
-            ];
+            foreach ($aircrafts as $aircraft) {
+                $registration = $aircraft->registration;
+                // ... (stats logic) ...
+
+                $fleet[$registration] = [
+                    'type' => $aircraft->type,
+                    'registration' => $registration,
+                    'icon' => $aircraft->icon,
+                    'status' => $aircraft->status, // Pass status to view
+                    'stats' => $stats,
+                    'health' => $healthPercent,
+                ];
+            }
         }
 
         // Get global last update time

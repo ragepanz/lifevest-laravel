@@ -41,10 +41,16 @@
             <div class="fleet-cards">
                 @foreach($typeGroup['aircraft'] as $registration => $aircraft)
                     <a href="{{ route('aircraft.show', $registration) }}"
-                        class="fleet-card {{ $aircraft['health'] >= 70 ? 'healthy' : ($aircraft['health'] >= 40 ? 'warning' : 'critical') }}">
+                        class="fleet-card {{ $aircraft['health'] >= 70 ? 'healthy' : ($aircraft['health'] >= 40 ? 'warning' : 'critical') }}"
+                        data-status="{{ $aircraft['status'] ?? 'active' }}">
                         <div class="fleet-card-header">
                             <div>
-                                <div class="fleet-card-type">{{ $aircraft['type'] }}</div>
+                                <div class="fleet-card-type">
+                                    {{ $aircraft['type'] }}
+                                    <span class="status-badge {{ $aircraft['status'] ?? 'active' }}">
+                                        {{ strtoupper($aircraft['status'] ?? 'active') }}
+                                    </span>
+                                </div>
                                 <div class="fleet-card-reg">{{ $registration }}</div>
                             </div>
                             <div class="fleet-card-icon">{{ $aircraft['icon'] }}</div>

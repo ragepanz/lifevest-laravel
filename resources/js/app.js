@@ -429,6 +429,7 @@ function showToast(message, type = 'success') {
 document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('searchInput');
     const typeFilter = document.getElementById('typeFilter');
+    const statusFilter = document.getElementById('statusFilter');
 
     // Only run on dashboard (where search exists)
     if (!searchInput || !typeFilter) return;
@@ -436,6 +437,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function filterFleet() {
         const searchTerm = searchInput.value.toLowerCase().trim();
         const typeValue = typeFilter.value.toLowerCase();
+        const statusValue = statusFilter ? statusFilter.value.toLowerCase() : 'all';
 
         // Get all fleet sections
         const fleetSections = document.querySelectorAll('.fleet-section');
@@ -450,9 +452,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             cards.forEach(card => {
                 const registration = card.querySelector('.fleet-card-reg')?.textContent.toLowerCase() || '';
-                const searchMatch = !searchTerm || registration.includes(searchTerm);
+                const cardStatus = card.dataset.status || 'active';
 
-                if (typeMatch && searchMatch) {
+                const searchMatch = !searchTerm || registration.includes(searchTerm);
+                const statusMatch = statusValue === 'all' || cardStatus === statusValue;
+
+                if (typeMatch && searchMatch && statusMatch) {
                     card.style.display = '';
                     visibleCount++;
                 } else {
@@ -461,13 +466,15 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             // Hide entire section if no visible cards or type doesn't match
-            section.style.display = (visibleCount > 0 && typeMatch) ? '' : 'none';
+            // (Only hide section if type strictly doesn't match OR no cards visible after filtering)
+            section.style.display = (visibleCount > 0) ? '' : 'none';
         });
     }
 
     // Event listeners
     searchInput.addEventListener('input', filterFleet);
     typeFilter.addEventListener('change', filterFleet);
+    if (statusFilter) statusFilter.addEventListener('change', filterFleet);
 
     // Clear search on Escape
     searchInput.addEventListener('keydown', function (e) {
