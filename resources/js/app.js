@@ -505,8 +505,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 1. Filter Rows
         const visibleRows = rows.filter(row => {
-            const reg = row.cells[0].textContent.toLowerCase();
-            const type = row.cells[1].textContent.toLowerCase();
+            // Index 1 = Registration, Index 2 = Type (Index 0 is Numbering)
+            const reg = row.cells[1].textContent.toLowerCase();
+            const type = row.cells[2].textContent.toLowerCase();
             const visible = reg.includes(searchTerm) || type.includes(searchTerm);
             row.style.display = visible ? '' : 'none';
             return visible;
@@ -514,10 +515,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 2. Sort Visible Rows
         visibleRows.sort((a, b) => {
-            const regA = a.cells[0].textContent.trim();
-            const regB = b.cells[0].textContent.trim();
-            const typeA = a.cells[1].textContent.trim();
-            const typeB = b.cells[1].textContent.trim();
+            const regA = a.cells[1].textContent.trim();
+            const regB = b.cells[1].textContent.trim();
+            const typeA = a.cells[2].textContent.trim();
+            const typeB = b.cells[2].textContent.trim();
             const statusA = a.querySelector('.status-badge').textContent.trim();
             const statusB = b.querySelector('.status-badge').textContent.trim();
 
@@ -531,8 +532,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // 3. Re-append sorted rows
-        visibleRows.forEach(row => tableBody.appendChild(row));
+        // 3. Re-append sorted rows & Update Numbers
+        visibleRows.forEach((row, index) => {
+            tableBody.appendChild(row);
+            // Update the first column (index 0) to be 1, 2, 3...
+            row.cells[0].textContent = index + 1;
+        });
     }
 
     // Events

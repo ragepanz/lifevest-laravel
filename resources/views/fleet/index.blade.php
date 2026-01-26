@@ -36,6 +36,7 @@
         <table class="fleet-table">
             <thead>
                 <tr>
+                    <th class="fleet-th" style="width: 50px;">#</th>
                     <th class="fleet-th">Registration</th>
                     <th class="fleet-th">Type</th>
                     <th class="fleet-th">Layout Code</th>
@@ -46,6 +47,7 @@
             <tbody>
                 @foreach($fleet as $aircraft)
                     <tr>
+                        <td class="fleet-td text-muted">{{ $loop->iteration }}</td>
                         <td class="fleet-td font-bold">{{ $aircraft->registration }}</td>
                         <td class="fleet-td">{{ $aircraft->type }}</td>
                         <td class="fleet-td font-mono">{{ $aircraft->layout }}</td>
