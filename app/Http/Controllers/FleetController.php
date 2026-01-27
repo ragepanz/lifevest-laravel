@@ -58,7 +58,12 @@ class FleetController extends Controller
             'status' => 'required|in:active,prolong',
         ]);
 
-        \App\Models\Aircraft::create($request->all());
+        // Force Uppercase
+        $data = $request->all();
+        $data['registration'] = strtoupper($request->registration);
+        $data['type'] = strtoupper($request->type);
+
+        \App\Models\Aircraft::create($data);
 
         return redirect()->route('fleet.index')->with('success', 'Aircraft added successfully.');
     }

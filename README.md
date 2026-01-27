@@ -121,19 +121,29 @@ Buka http://localhost:8000
 
 ---
 
-## ✈️ Menambahkan Pesawat Baru
+## ⚙️ Fleet Manager
 
+Halaman **Fleet Manager** (`/fleet`) adalah pusat kontrol data pesawat. Di sini Anda bisa:
+
+1.  **Monitoring Armada**: Melihat daftar seluruh pesawat, cari (Search), dan urutkan (Sort).
+2.  **Tambah Pesawat**: Input otomatis kapital, validasi unik, dan auto-detect layout.
+3.  **Edit Pesawat**: Mengubah status (Active/Prolong).
+4.  **Hapus Pesawat**: Hapus data permanen.
+
+---
+
+## ✈️ Menambahkan Pesawat Baru
 ### 1. Via Fleet Manager (Cara Utama)
 Untuk menambahkan pesawat dengan layout yang sudah ada:
 
-1. Buka menu **Fleet Manager** di dashboard (atau akses `/fleet`).
-2. Klik tombol **"+ Add New Aircraft"**.
-3. Isi form:
-   - **Registration**: Nomor registrasi (misal: PK-GPC)
-   - **Type**: Tipe pesawat (misal: A330-300)
-   - **Layout**: Pilih layout kursi yang sesuai dari dropdown.
-   - **Status**: Pilih Active atau Prolong.
-4. Klik **Save**. Pesawat akan langsung muncul di dashboard.
+1.  Buka menu **Fleet Manager** di dashboard (atau akses `/fleet`).
+2.  Klik tombol **"+ Add New Aircraft"**.
+3.  Isi form:
+    -   **Registration**: Nomor registrasi (misal: PK-GPC)
+    -   **Type**: Tipe pesawat (misal: A330-300)
+    -   **Layout**: Pilih layout kursi yang sesuai dari dropdown.
+    -   **Status**: Pilih Active atau Prolong.
+4.  Klik **Save**. Pesawat akan langsung muncul di dashboard.
 
 ---
 

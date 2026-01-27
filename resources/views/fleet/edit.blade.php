@@ -14,8 +14,11 @@
             </div>
 
             <div class="form-group">
-                <label class="form-label">Type</label>
-                <input type="text" name="type" value="{{ $aircraft->type }}" required class="form-input">
+                <div class="form-group">
+                    <label class="form-label">Type (Cannot be changed)</label>
+                    <input type="text" value="{{ $aircraft->type }}" disabled class="form-input">
+                    <input type="hidden" name="type" value="{{ $aircraft->type }}">
+                </div>
             </div>
 
             <div class="form-group">

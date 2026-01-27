@@ -9,12 +9,17 @@
 
             <div class="form-group">
                 <label class="form-label">Registration (e.g. PK-GPC)</label>
-                <input type="text" name="registration" required placeholder="PK-..." class="form-input">
+                <input type="text" name="registration" value="{{ old('registration') }}" required placeholder="PK-..."
+                    class="form-input" style="text-transform: uppercase; {{ $errors->has('registration') ? 'border-color: #ef4444;' : '' }}">
+                @error('registration')
+                    <span
+                        style="color: #ef4444; font-size: 0.875rem; display: block; margin-top: 0.25rem;">{{ $message }}</span>
+                @enderror
             </div>
 
             <div class="form-group">
                 <label class="form-label">Type (e.g. A330-300)</label>
-                <input type="text" name="type" required placeholder="B737-800" class="form-input">
+                <input type="text" name="type" value="{{ old('type') }}" required placeholder="B737-800" class="form-input" style="text-transform: uppercase;">
             </div>
 
             <div class="form-group">
