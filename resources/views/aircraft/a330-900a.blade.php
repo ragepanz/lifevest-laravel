@@ -26,7 +26,7 @@
         <h2>🧑‍✈️ Attendant D11 & D21</h2>
         <div class="seat-grid">
             <div class="grid-header grid-row-2-2">
-                <span class="col-label col-header" data-col="att/d11-LL1">LL1</span>
+                <span class="col-label col-header" data-col="att/d11-LL1">LL</span>
                 <span class="col-label col-header" data-col="att/d11-LR">LR</span>
                 <span class="row-label"></span>
                 <span class="seat-placeholder"></span>
