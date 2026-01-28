@@ -31,14 +31,14 @@
         <h2>🧑‍✈️ Attendant D11</h2>
         <div class="seat-grid">
             <div class="grid-header grid-row-2-2">
-                <span class="col-label col-header" data-col="att/d11-A">A</span>
-                <span class="col-label col-header" data-col="att/d11-C">C</span>
+                <span class="col-label col-header" data-col="att/d11-LL">LL</span>
+                <span class="col-label col-header" data-col="att/d11-LR">LR</span>
                 <span class="row-label"></span>
                 <span class="seat-placeholder"></span>
                 <span class="seat-placeholder"></span>
             </div>
             <div class="seat-row grid-row-2-2">
-                @foreach(['A', 'C'] as $col)
+                @foreach(['LL', 'LR'] as $col)
                     @php
                         $seatId = 'att/d11-' . $col;
                         $seat = $seats[$seatId] ?? null;
@@ -119,14 +119,14 @@
         <h2>🧑‍✈️ Attendant D12 & D22</h2>
         <div class="seat-grid">
             <div class="grid-header grid-row-2-2">
-                <span class="col-label col-header" data-col="att/d12-A">A</span>
-                <span class="col-label col-header" data-col="att/d12-C">C</span>
+                <span class="col-label col-header" data-col="att/d12-LL">LL</span>
+                <span class="col-label col-header" data-col="att/d12-LR">LR</span>
                 <span class="row-label"></span>
-                <span class="col-label col-header" data-col="att/d22-H">H</span>
-                <span class="col-label col-header" data-col="att/d22-K">K</span>
+                <span class="col-label col-header" data-col="att/d22-RL">RL</span>
+                <span class="col-label col-header" data-col="att/d22-RR">RR</span>
             </div>
             <div class="seat-row grid-row-2-2">
-                @foreach(['A', 'C'] as $col)
+                @foreach(['LL', 'LR'] as $col)
                     @php
                         $seatId = 'att/d12-' . $col;
                         $seat = $seats[$seatId] ?? null;
@@ -141,7 +141,7 @@
                     </div>
                 @endforeach
                 <div class="row-number">D12/D22</div>
-                @foreach(['H', 'K'] as $col)
+                @foreach(['RL', 'RR'] as $col)
                     @php
                         $seatId = 'att/d22-' . $col;
                         $seat = $seats[$seatId] ?? null;
