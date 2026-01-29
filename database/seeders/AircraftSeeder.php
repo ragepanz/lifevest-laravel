@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Aircraft;
 
 class AircraftSeeder extends Seeder
 {
@@ -12,110 +12,184 @@ class AircraftSeeder extends Seeder
      */
     public function run(): void
     {
-        // Initial Aircraft Data
-        $layouts = [
-            // B737-800 Fleet
-            'PK-GFD' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GFG' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GFI' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GFM' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GFP' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GMA' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GMF' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GMM' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GFF' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GFH' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GFR' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GFU' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GFW' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GFX' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GNA' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GNC' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GNE' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GNF' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GNM' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GNN' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GNQ' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GNR' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GMP' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GMU' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GMV' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GMW' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GMX' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GMY' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GFJ' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GFQ' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GNG' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GNH' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GUA' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GUC' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GUG' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GFS' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GMD' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GMC' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GMI' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GFV' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GUF' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GDC' => ['type' => 'B737 MAX 8', 'icon' => '✈️', 'layout' => 'b737-e46'],
-            'PK-GUH' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e48'],
-            'PK-GUI' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e48'],
-            'PK-GUD' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e47'],
-            'PK-GUE' => ['type' => 'B737-800', 'icon' => '✈️', 'layout' => 'b737-e47'],
+        $aircraft = [
+            // ===== GARUDA INDONESIA (airline_id: 1) =====
 
-            // B777
-            'PK-GIA' => ['type' => 'B777-300', 'icon' => '🛫', 'layout' => 'b777-2class'],
-            'PK-GIC' => ['type' => 'B777-300', 'icon' => '🛫', 'layout' => 'b777-2class'],
-            'PK-GIH' => ['type' => 'B777-300', 'icon' => '🛫', 'layout' => 'b777-2class'],
-            'PK-GII' => ['type' => 'B777-300', 'icon' => '🛫', 'layout' => 'b777-2class'],
-            'PK-GIJ' => ['type' => 'B777-300', 'icon' => '🛫', 'layout' => 'b777-2class'],
-            'PK-GIK' => ['type' => 'B777-300', 'icon' => '🛫', 'layout' => 'b777-2class'],
-            'PK-GIF' => ['type' => 'B777-300', 'icon' => '🛫', 'layout' => 'b777-3class'],
-            'PK-GIG' => ['type' => 'B777-300', 'icon' => '🛫', 'layout' => 'b777-3class'],
+            // ATR72-600
+            ['registration' => 'PK-GAF', 'type' => 'ATR72-600', 'layout' => 'atr72', 'status' => 'prolong', 'airline_id' => 1],
+            ['registration' => 'PK-GAI', 'type' => 'ATR72-600', 'layout' => 'atr72', 'status' => 'prolong', 'airline_id' => 1],
+            ['registration' => 'PK-GAJ', 'type' => 'ATR72-600', 'layout' => 'atr72', 'status' => 'prolong', 'airline_id' => 1],
 
-            // A330
-            'PK-GHE' => ['type' => 'A330-900', 'icon' => '🛩️', 'layout' => 'a330-900a'],
-            'PK-GHF' => ['type' => 'A330-900', 'icon' => '🛩️', 'layout' => 'a330-900a'],
-            'PK-GHG' => ['type' => 'A330-900', 'icon' => '🛩️', 'layout' => 'a330-900a'],
-            'PK-GHH' => ['type' => 'A330-900', 'icon' => '🛩️', 'layout' => 'a330-900b'],
-            'PK-GHI' => ['type' => 'A330-900', 'icon' => '🛩️', 'layout' => 'a330-900b'],
-            'PK-GPZ' => ['type' => 'A330-300', 'icon' => '🛩️', 'layout' => 'a330-300a'],
-            'PK-GHA' => ['type' => 'A330-300', 'icon' => '🛩️', 'layout' => 'a330-300a'],
-            'PK-GHC' => ['type' => 'A330-300', 'icon' => '🛩️', 'layout' => 'a330-300a'],
-            'PK-GHD' => ['type' => 'A330-300', 'icon' => '🛩️', 'layout' => 'a330-300a'],
-            'PK-GPU' => ['type' => 'A330-300', 'icon' => '🛩️', 'layout' => 'a330-300b'],
-            'PK-GPV' => ['type' => 'A330-300', 'icon' => '🛩️', 'layout' => 'a330-300b'],
-            'PK-GPW' => ['type' => 'A330-300', 'icon' => '🛩️', 'layout' => 'a330-300b'],
-            'PK-GPY' => ['type' => 'A330-300', 'icon' => '🛩️', 'layout' => 'a330-300b'],
-            'PK-GPR' => ['type' => 'A330-300', 'icon' => '🛩️', 'layout' => 'a330-300b'],
-            'PK-GPT' => ['type' => 'A330-300', 'icon' => '🛩️', 'layout' => 'a330-300b'],
-            'PK-GPX' => ['type' => 'A330-300', 'icon' => '🛩️', 'layout' => 'a330-300b'],
-            'PK-GPC' => ['type' => 'A330-300', 'icon' => '🛩️', 'layout' => 'a330-300c'],
-            'PK-GPG' => ['type' => 'A330-300', 'icon' => '🛩️', 'layout' => 'a330-300c'],
-            'PK-GPE' => ['type' => 'A330-341', 'icon' => '🛩️', 'layout' => 'a330-300c'],
-            'PK-GPF' => ['type' => 'A330-341', 'icon' => '🛩️', 'layout' => 'a330-300c'],
-            'PK-GPA' => ['type' => 'A330-300', 'icon' => '📦', 'layout' => 'a330-300cargo'],
-            'PK-GPD' => ['type' => 'A330-300', 'icon' => '📦', 'layout' => 'a330-300cargo'],
-            'PK-GPO' => ['type' => 'A330-200', 'icon' => '🛩️', 'layout' => 'a330-200a'],
-            'PK-GPM' => ['type' => 'A330-200', 'icon' => '🛩️', 'layout' => 'a330-200a'],
-            'PK-GPQ' => ['type' => 'A330-200', 'icon' => '🛩️', 'layout' => 'a330-200b'],
-            'PK-GPS' => ['type' => 'A330-200', 'icon' => '🛩️', 'layout' => 'a330-200b'],
-            'PK-GPL' => ['type' => 'A330-200', 'icon' => '🛩️', 'layout' => 'a330-200b'],
+            // A330-200
+            ['registration' => 'PK-GPL', 'type' => 'A330-200', 'layout' => 'a330-200b', 'status' => 'prolong', 'airline_id' => 1],
+            ['registration' => 'PK-GPM', 'type' => 'A330-200', 'layout' => 'a330-200a', 'status' => 'prolong', 'airline_id' => 1],
+            ['registration' => 'PK-GPO', 'type' => 'A330-200', 'layout' => 'a330-200a', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GPQ', 'type' => 'A330-200', 'layout' => 'a330-200b', 'status' => 'prolong', 'airline_id' => 1],
+            ['registration' => 'PK-GPS', 'type' => 'A330-200', 'layout' => 'a330-200b', 'status' => 'prolong', 'airline_id' => 1],
 
-            // ATR
-            'PK-GAF' => ['type' => 'ATR72-600', 'icon' => '🛫', 'layout' => 'atr72'],
-            'PK-GAI' => ['type' => 'ATR72-600', 'icon' => '🛫', 'layout' => 'atr72'],
-            'PK-GAJ' => ['type' => 'ATR72-600', 'icon' => '🛫', 'layout' => 'atr72'],
+            // A330-300
+            ['registration' => 'PK-GHA', 'type' => 'A330-300', 'layout' => 'a330-300a', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GHC', 'type' => 'A330-300', 'layout' => 'a330-300a', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GHD', 'type' => 'A330-300', 'layout' => 'a330-300a', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GPA', 'type' => 'A330-300', 'layout' => 'a330-300cargo', 'status' => 'prolong', 'airline_id' => 1],
+            ['registration' => 'PK-GPC', 'type' => 'A330-300', 'layout' => 'a330-300c', 'status' => 'prolong', 'airline_id' => 1],
+            ['registration' => 'PK-GPD', 'type' => 'A330-300', 'layout' => 'a330-300cargo', 'status' => 'prolong', 'airline_id' => 1],
+            ['registration' => 'PK-GPG', 'type' => 'A330-300', 'layout' => 'a330-300c', 'status' => 'prolong', 'airline_id' => 1],
+            ['registration' => 'PK-GPR', 'type' => 'A330-300', 'layout' => 'a330-300b', 'status' => 'prolong', 'airline_id' => 1],
+            ['registration' => 'PK-GPT', 'type' => 'A330-300', 'layout' => 'a330-300b', 'status' => 'prolong', 'airline_id' => 1],
+            ['registration' => 'PK-GPU', 'type' => 'A330-300', 'layout' => 'a330-300b', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GPV', 'type' => 'A330-300', 'layout' => 'a330-300b', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GPW', 'type' => 'A330-300', 'layout' => 'a330-300b', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GPX', 'type' => 'A330-300', 'layout' => 'a330-300b', 'status' => 'prolong', 'airline_id' => 1],
+            ['registration' => 'PK-GPY', 'type' => 'A330-300', 'layout' => 'a330-300b', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GPZ', 'type' => 'A330-300', 'layout' => 'a330-300a', 'status' => 'active', 'airline_id' => 1],
+
+            // A330-341
+            ['registration' => 'PK-GPE', 'type' => 'A330-341', 'layout' => 'a330-300c', 'status' => 'prolong', 'airline_id' => 1],
+            ['registration' => 'PK-GPF', 'type' => 'A330-341', 'layout' => 'a330-300c', 'status' => 'prolong', 'airline_id' => 1],
+
+            // A330-900
+            ['registration' => 'PK-GHE', 'type' => 'A330-900', 'layout' => 'a330-900a', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GHF', 'type' => 'A330-900', 'layout' => 'a330-900a', 'status' => 'prolong', 'airline_id' => 1],
+            ['registration' => 'PK-GHG', 'type' => 'A330-900', 'layout' => 'a330-900a', 'status' => 'prolong', 'airline_id' => 1],
+            ['registration' => 'PK-GHH', 'type' => 'A330-900', 'layout' => 'a330-900b', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GHI', 'type' => 'A330-900', 'layout' => 'a330-900b', 'status' => 'prolong', 'airline_id' => 1],
+
+            // B737-800 (e46 layout)
+            ['registration' => 'PK-GFD', 'type' => 'B737-800', 'layout' => 'b737-e46', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GFF', 'type' => 'B737-800', 'layout' => 'b737-e46', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GFG', 'type' => 'B737-800', 'layout' => 'b737-e46', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GFH', 'type' => 'B737-800', 'layout' => 'b737-e46', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GFI', 'type' => 'B737-800', 'layout' => 'b737-e46', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GFJ', 'type' => 'B737-800', 'layout' => 'b737-e46', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GFM', 'type' => 'B737-800', 'layout' => 'b737-e46', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GFP', 'type' => 'B737-800', 'layout' => 'b737-e46', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GFQ', 'type' => 'B737-800', 'layout' => 'b737-e46', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GFR', 'type' => 'B737-800', 'layout' => 'b737-e46', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GFS', 'type' => 'B737-800', 'layout' => 'b737-e46', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GFU', 'type' => 'B737-800', 'layout' => 'b737-e46', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GFV', 'type' => 'B737-800', 'layout' => 'b737-e46', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GFW', 'type' => 'B737-800', 'layout' => 'b737-e46', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GFX', 'type' => 'B737-800', 'layout' => 'b737-e46', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GMA', 'type' => 'B737-800', 'layout' => 'b737-e46', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GMC', 'type' => 'B737-800', 'layout' => 'b737-e46', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GMD', 'type' => 'B737-800', 'layout' => 'b737-e46', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GMF', 'type' => 'B737-800', 'layout' => 'b737-e46', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GMI', 'type' => 'B737-800', 'layout' => 'b737-e46', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GMM', 'type' => 'B737-800', 'layout' => 'b737-e46', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GMP', 'type' => 'B737-800', 'layout' => 'b737-e46', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GMU', 'type' => 'B737-800', 'layout' => 'b737-e46', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GMV', 'type' => 'B737-800', 'layout' => 'b737-e46', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GMW', 'type' => 'B737-800', 'layout' => 'b737-e46', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GMX', 'type' => 'B737-800', 'layout' => 'b737-e46', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GMY', 'type' => 'B737-800', 'layout' => 'b737-e46', 'status' => 'active', 'airline_id' => 1],
+
+            // B737-800 (e47 layout)
+            ['registration' => 'PK-GNA', 'type' => 'B737-800', 'layout' => 'b737-e47', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GNC', 'type' => 'B737-800', 'layout' => 'b737-e47', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GNE', 'type' => 'B737-800', 'layout' => 'b737-e47', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GNF', 'type' => 'B737-800', 'layout' => 'b737-e47', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GNG', 'type' => 'B737-800', 'layout' => 'b737-e47', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GNH', 'type' => 'B737-800', 'layout' => 'b737-e47', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GNM', 'type' => 'B737-800', 'layout' => 'b737-e47', 'status' => 'active', 'airline_id' => 1],
+
+            // B737-800 (e48 layout)
+            ['registration' => 'PK-GNN', 'type' => 'B737-800', 'layout' => 'b737-e48', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GNQ', 'type' => 'B737-800', 'layout' => 'b737-e48', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GNR', 'type' => 'B737-800', 'layout' => 'b737-e48', 'status' => 'active', 'airline_id' => 1],
+
+            // B737-800 (e49 layout)
+            ['registration' => 'PK-GUA', 'type' => 'B737-800', 'layout' => 'b737-e49', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GUC', 'type' => 'B737-800', 'layout' => 'b737-e49', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GUD', 'type' => 'B737-800', 'layout' => 'b737-e49', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GUE', 'type' => 'B737-800', 'layout' => 'b737-e49', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GUF', 'type' => 'B737-800', 'layout' => 'b737-e49', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GUG', 'type' => 'B737-800', 'layout' => 'b737-e49', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GUH', 'type' => 'B737-800', 'layout' => 'b737-e49', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GUI', 'type' => 'B737-800', 'layout' => 'b737-e49', 'status' => 'active', 'airline_id' => 1],
+
+            // B737 MAX 8
+            ['registration' => 'PK-GDC', 'type' => 'B737MAX8', 'layout' => 'b737-e46', 'status' => 'active', 'airline_id' => 1],
+
+            // B777-300 (2-class)
+            ['registration' => 'PK-GIA', 'type' => 'B777-300', 'layout' => 'b777-2class', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GIC', 'type' => 'B777-300', 'layout' => 'b777-2class', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GIH', 'type' => 'B777-300', 'layout' => 'b777-2class', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GII', 'type' => 'B777-300', 'layout' => 'b777-2class', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GIJ', 'type' => 'B777-300', 'layout' => 'b777-2class', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GIK', 'type' => 'B777-300', 'layout' => 'b777-2class', 'status' => 'active', 'airline_id' => 1],
+
+            // B777-300 (3-class)
+            ['registration' => 'PK-GIF', 'type' => 'B777-300', 'layout' => 'b777-3class', 'status' => 'active', 'airline_id' => 1],
+            ['registration' => 'PK-GIG', 'type' => 'B777-300', 'layout' => 'b777-3class', 'status' => 'active', 'airline_id' => 1],
+
+            // ===== CITILINK (airline_id: 2) =====
+
+            // A320-200
+            ['registration' => 'PK-GQA', 'type' => 'A320-200', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GQC', 'type' => 'A320-200', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GQD', 'type' => 'A320-200', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GQE', 'type' => 'A320-200', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GQF', 'type' => 'A320-200', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GQG', 'type' => 'A320-200', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GQH', 'type' => 'A320-200', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GQI', 'type' => 'A320-200', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GQJ', 'type' => 'A320-200', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GQK', 'type' => 'A320-200', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GQL', 'type' => 'A320-200', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GQM', 'type' => 'A320-200', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GQN', 'type' => 'A320-200', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GQO', 'type' => 'A320-200', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GQP', 'type' => 'A320-200', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GQQ', 'type' => 'A320-200', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GQR', 'type' => 'A320-200', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GQS', 'type' => 'A320-200', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GQT', 'type' => 'A320-200', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GTA', 'type' => 'A320-200', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+
+            // A320-214
+            ['registration' => 'PK-GQU', 'type' => 'A320-214', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+
+            // A320-233
+            ['registration' => 'PK-GGC', 'type' => 'A320-233', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GLE', 'type' => 'A320-233', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GLG', 'type' => 'A320-233', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GLI', 'type' => 'A320-233', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+
+            // A320-241
+            ['registration' => 'PK-GLK', 'type' => 'A320-241', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GLL', 'type' => 'A320-241', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GLM', 'type' => 'A320-241', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GLN', 'type' => 'A320-241', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GLO', 'type' => 'A320-241', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GLP', 'type' => 'A320-241', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GLQ', 'type' => 'A320-241', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GLR', 'type' => 'A320-241', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GLS', 'type' => 'A320-241', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GLT', 'type' => 'A320-241', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GLU', 'type' => 'A320-241', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GLV', 'type' => 'A320-241', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GLW', 'type' => 'A320-241', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GLX', 'type' => 'A320-241', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GLY', 'type' => 'A320-241', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GLZ', 'type' => 'A320-241', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+
+            // A320-251N (Neo)
+            ['registration' => 'PK-GTC', 'type' => 'A320-251N', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GTD', 'type' => 'A320-251N', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GTE', 'type' => 'A320-251N', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GTF', 'type' => 'A320-251N', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GTG', 'type' => 'A320-251N', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GTH', 'type' => 'A320-251N', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GTI', 'type' => 'A320-251N', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GTJ', 'type' => 'A320-251N', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GTK', 'type' => 'A320-251N', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
         ];
 
-        foreach ($layouts as $registration => $data) {
-            \App\Models\Aircraft::updateOrCreate(
-                ['registration' => $registration],
-                [
-                    'type' => $data['type'],
-                    'icon' => $data['icon'],
-                    'layout' => $data['layout'],
-                    'status' => 'active', // Default all to active
-                ]
+        foreach ($aircraft as $data) {
+            Aircraft::updateOrCreate(
+                ['registration' => $data['registration']],
+                $data
             );
         }
     }
