@@ -134,7 +134,7 @@ Halaman **Fleet Manager** (`/fleet`) adalah pusat kontrol data pesawat dan airli
 - **Monitoring Armada**: Melihat daftar seluruh pesawat
 - **Filter**: Filter berdasarkan Airline, Type, Status
 - **Tambah Pesawat**: Input dengan pilihan airline
-- **Edit Pesawat**: Mengubah type, airline, status
+- **Edit Pesawat**: Mengubah status (Active/Prolong) saja (Airline, Type & Registration terkunci)
 - **Hapus Pesawat**: Hapus data permanen
 
 ### Tab Airlines
