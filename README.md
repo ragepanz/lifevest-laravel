@@ -9,6 +9,8 @@ Aplikasi pelacakan tanggal kedaluwarsa life vest untuk armada pesawat GMF AeroAs
 - [Cara Menjalankan](#-cara-menjalankan)
 - [Panduan Penggunaan](#-panduan-penggunaan)
 - [Keyboard Shortcuts](#-keyboard-shortcuts)
+- [Fleet Manager](#️-fleet-manager)
+- [Airlines Management](#-airlines-management)
 - [Menambahkan Pesawat Baru](#-menambahkan-pesawat-baru)
 - [Struktur File](#-struktur-file-penting)
 
@@ -57,10 +59,13 @@ Buka http://localhost:8000
 
 ### Dashboard
 - Menampilkan **Fleet Overview** (ringkasan status semua pesawat)
-- Menampilkan **Fleet Status** per tipe (B737, B777, A330)
-- **Search**: Cari pesawat berdasarkan registrasi
-- **Filter**: Filter berdasarkan tipe pesawat
-- **Fleet Manager**: Kelola data pesawat (Tambah/Edit/Hapus) via tombol di kanan atas
+- Menampilkan **Fleet Status** per Airline, lalu per Tipe (Garuda Indonesia → B737, A330, dll)
+- **Filter**: Klik tombol "🔍 Filter" untuk menampilkan panel filter:
+  - Filter berdasarkan **Airline**
+  - Filter berdasarkan **Type** pesawat
+  - Filter berdasarkan **Status** (Active/Prolong)
+  - Filter berdasarkan **Health** (Safe/Warning/Critical)
+- **Fleet Manager**: Kelola data pesawat & airline via tombol "Manage Fleet" di navbar
 - Klik kartu pesawat untuk masuk ke halaman seat map
 
 ---
@@ -123,27 +128,53 @@ Buka http://localhost:8000
 
 ## ⚙️ Fleet Manager
 
-Halaman **Fleet Manager** (`/fleet`) adalah pusat kontrol data pesawat. Di sini Anda bisa:
+Halaman **Fleet Manager** (`/fleet`) adalah pusat kontrol data pesawat dan airline. Tersedia dalam format **Tab**:
 
-1.  **Monitoring Armada**: Melihat daftar seluruh pesawat, cari (Search), dan urutkan (Sort).
-2.  **Tambah Pesawat**: Input otomatis kapital, validasi unik, dan auto-detect layout.
-3.  **Edit Pesawat**: Mengubah status (Active/Prolong).
-4.  **Hapus Pesawat**: Hapus data permanen.
+### Tab Aircraft
+- **Monitoring Armada**: Melihat daftar seluruh pesawat
+- **Filter**: Filter berdasarkan Airline, Type, Status
+- **Tambah Pesawat**: Input dengan pilihan airline
+- **Edit Pesawat**: Mengubah type, airline, status
+- **Hapus Pesawat**: Hapus data permanen
+
+### Tab Airlines
+- **Daftar Airline**: Melihat semua maskapai yang terdaftar
+- **Tambah Airline**: Input nama dan kode IATA
+- **Edit Airline**: Mengubah nama dan kode
+- **Hapus Airline**: Hapus airline (hanya jika tidak ada pesawat terkait)
+
+---
+
+## 🏢 Airlines Management
+
+Sistem mendukung **multi-airline** dengan fitur:
+
+1. **Airline Grouping**: Dashboard menampilkan pesawat dikelompokkan per maskapai
+2. **Dynamic Airlines**: Tambah/hapus airline sesuai kebutuhan
+3. **Default Airline**: Garuda Indonesia (kode: GA)
+
+### Menambah Airline Baru
+1. Buka **Fleet Manager** → Tab **Airlines**
+2. Klik **"+ Add New Airline"**
+3. Isi nama (contoh: Citilink) dan kode IATA (contoh: QG)
+4. Klik **Save**
 
 ---
 
 ## ✈️ Menambahkan Pesawat Baru
+
 ### 1. Via Fleet Manager (Cara Utama)
 Untuk menambahkan pesawat dengan layout yang sudah ada:
 
-1.  Buka menu **Fleet Manager** di dashboard (atau akses `/fleet`).
-2.  Klik tombol **"+ Add New Aircraft"**.
-3.  Isi form:
-    -   **Registration**: Nomor registrasi (misal: PK-GPC)
-    -   **Type**: Tipe pesawat (misal: A330-300)
-    -   **Layout**: Pilih layout kursi yang sesuai dari dropdown.
-    -   **Status**: Pilih Active atau Prolong.
-4.  Klik **Save**. Pesawat akan langsung muncul di dashboard.
+1. Buka menu **Fleet Manager** di dashboard (atau akses `/fleet`).
+2. Klik tombol **"+ Add New Aircraft"**.
+3. Isi form:
+    - **Airline**: Pilih maskapai (Garuda Indonesia, Citilink, dll)
+    - **Registration**: Nomor registrasi (misal: PK-GPC)
+    - **Type**: Tipe pesawat (misal: A330-300)
+    - **Layout**: Pilih layout kursi yang sesuai dari dropdown
+    - **Status**: Pilih Active atau Prolong
+4. Klik **Save**. Pesawat akan langsung muncul di dashboard.
 
 ---
 
@@ -168,15 +199,31 @@ Jika Anda memiliki pesawat dengan konfigurasi kursi yang **belum pernah ada** (t
 lifevest-laravel/
 ├── config/
 │   └── aircraft_class_rows.php   # Config class type per layout
-├── database/seeders/
-│   └── AircraftSeeder.php        # Initial Data Pesawat & Layouts
-├── app/Http/Controllers/
-│   ├── DashboardController.php   # Logic dashboard
-│   ├── FleetController.php       # Logic CRUD Pesawat (Fleet Manager)
-│   └── AircraftController.php    # Logic seat map & update expiry
+├── database/
+│   ├── migrations/
+│   │   ├── create_airlines_table.php    # Tabel airlines
+│   │   ├── create_aircraft_table.php    # Tabel aircraft
+│   │   └── add_airline_id_to_aircraft_table.php
+│   └── seeders/
+│       └── AircraftSeeder.php    # Initial Data Pesawat & Layouts
+├── app/
+│   ├── Models/
+│   │   ├── Aircraft.php          # Model pesawat (belongsTo Airline)
+│   │   ├── Airline.php           # Model airline (hasMany Aircraft)
+│   │   └── Seat.php              # Model seat/kursi
+│   └── Http/Controllers/
+│       ├── DashboardController.php   # Logic dashboard (grouped by airline)
+│       ├── FleetController.php       # Logic CRUD Pesawat & Airlines
+│       └── AircraftController.php    # Logic seat map & update expiry
 ├── resources/views/
 │   ├── layouts/app.blade.php     # Master layout + Navbar
-│   ├── dashboard.blade.php       # Halaman dashboard
+│   ├── dashboard.blade.php       # Halaman dashboard (with filters)
+│   ├── fleet/
+│   │   ├── index.blade.php       # Fleet Manager (Tabs: Aircraft & Airlines)
+│   │   ├── create.blade.php      # Form tambah pesawat
+│   │   ├── edit.blade.php        # Form edit pesawat
+│   │   ├── airline-create.blade.php  # Form tambah airline
+│   │   └── airline-edit.blade.php    # Form edit airline
 │   ├── aircraft/
 │   │   ├── b737-e46.blade.php    # B737 Layout (46 rows)
 │   │   ├── b737-e47.blade.php    # B737 Layout (47 rows)
@@ -189,7 +236,9 @@ lifevest-laravel/
 │   │   ├── a330-300b.blade.php   # A330-300 Layout B
 │   │   ├── a330-300c.blade.php   # A330-300 Layout C (All Economy)
 │   │   ├── a330-200a.blade.php   # A330-200 Layout A
-│   │   └── a330-200b.blade.php   # A330-200 Layout B
+│   │   ├── a330-200b.blade.php   # A330-200 Layout B
+│   │   ├── a320a.blade.php       # A320 Layout
+│   │   └── atr72.blade.php       # ATR72-600 Layout
 │   └── components/
 │       ├── cockpit-section.blade.php
 │       ├── seat-cell.blade.php
@@ -227,5 +276,15 @@ lifevest-laravel/
 | **A330-300** | 14 | 300a, 300b, 300c, Cargo |
 | **A330-341** | 2 | 300c |
 | **A330-200** | 5 | 200a, 200b |
+| **A320-200** | - | a320a |
 | **ATR72-600** | 3 | atr72 |
+
+---
+
+## 🏢 Airlines
+
+| Airline | Kode IATA |
+|---------|-----------|
+| Garuda Indonesia | GA |
+| Citilink | QG |
 
