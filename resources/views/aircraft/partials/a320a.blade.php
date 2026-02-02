@@ -1,26 +1,9 @@
-<!-- Cockpit Section (Inline for Safe PDF) -->
-<section class="cockpit-section">
-    <h2>Cockpit</h2>
-    <div class="cockpit-grid">
-        @foreach(['captain', 'observer1', 'observer2', 'copilot'] as $seatId)
-            @php
-                $seat = $seats[$seatId] ?? null;
-                $status = $seat?->status ?? 'no-data';
-                $expiryDate = $seat?->expiry_date?->format('j M Y') ?? '-';
-            @endphp
-            <div class="seat-card cockpit-seat status-{{ $status }}" data-seat="{{ $seatId }}">
-                <div class="seat-label">{{ ucfirst(str_replace(['1', '2'], [' 1', ' 2'], $seatId)) }}</div>
-                <div class="seat-date" data-date="{{ $seat?->expiry_date?->format('Y-m-d') ?? '' }}">
-                    {{ $expiryDate }}
-                </div>
-            </div>
-        @endforeach
-    </div>
-</section>
+<!-- Cockpit Section -->
+<x-cockpit-section :seats="$seats" />
 
 <!-- Attendant D11 (Forward - 2 seats left) -->
 <section class="cabin-section">
-    <h2>Attendant D11</h2>
+    <h2>🧑‍✈️ Attendant D11</h2>
     <div class="seat-grid">
         <div class="grid-header grid-row-3-3">
             <span class="col-label col-header" data-col="att/d11-LL">LL</span>
@@ -65,9 +48,9 @@
     </div>
 </section>
 
-<!-- Economy Class - Rows 1-31 -->
+<!-- Economy Class - Rows 1-31 (3-3 layout: A B C - D E F, skip row 13) -->
 <section class="cabin-section">
-    <h2>Economy Class - Rows 1-31</h2>
+    <h2>🪑 Economy Class - Rows 1-31</h2>
     <div class="seat-grid">
         <div class="grid-header grid-row-3-3">
             <span class="col-label col-header" data-col="A">A</span>
@@ -98,9 +81,9 @@
     </div>
 </section>
 
-<!-- Attendant D12 & D22 -->
+<!-- Attendant D12 & D22 (Aft - 1 left, 2 right) -->
 <section class="cabin-section">
-    <h2>Attendant D12 & D22</h2>
+    <h2>🧑‍✈️ Attendant D12 & D22</h2>
     <div class="seat-grid">
         <div class="grid-header grid-row-3-3">
             <span class="col-label col-header" data-col="att/d12-L">L</span>
@@ -156,9 +139,9 @@
     </div>
 </section>
 
-<!-- Spare Section -->
+<!-- Spare Section: PAX & INF -->
 <section class="cabin-section">
-    <h2>Spare</h2>
+    <h2>📦 Spare</h2>
     <div class="spare-grid">
         <!-- PAX Column -->
         <div class="spare-column" id="pax-column">
@@ -174,6 +157,7 @@
                         $expiryDate = $seat?->expiry_date?->format('j M Y') ?? '-';
                     @endphp
                     <div class="seat-card spare-card status-{{ $status }}" data-seat="{{ $seatId }}">
+                        <button type="button" class="btn-delete-spare" title="Delete">&times;</button>
                         <div class="seat-id">{{ $num }}</div>
                         <div class="seat-date" data-date="{{ $seat?->expiry_date?->format('Y-m-d') ?? '' }}">
                             {{ $expiryDate }}
@@ -183,6 +167,7 @@
                     <p class="empty-message">Belum ada data PAX</p>
                 @endforelse
             </div>
+            <button type="button" class="btn btn-add-spare" data-type="pax">+ Add PAX</button>
         </div>
 
         <!-- INF Column -->
@@ -199,6 +184,7 @@
                         $expiryDate = $seat?->expiry_date?->format('j M Y') ?? '-';
                     @endphp
                     <div class="seat-card spare-card status-{{ $status }}" data-seat="{{ $seatId }}">
+                        <button type="button" class="btn-delete-spare" title="Delete">&times;</button>
                         <div class="seat-id">{{ $num }}</div>
                         <div class="seat-date" data-date="{{ $seat?->expiry_date?->format('Y-m-d') ?? '' }}">
                             {{ $expiryDate }}
@@ -208,6 +194,7 @@
                     <p class="empty-message">Belum ada data INF</p>
                 @endforelse
             </div>
+            <button type="button" class="btn btn-add-spare" data-type="inf">+ Add INF</button>
         </div>
     </div>
 </section>

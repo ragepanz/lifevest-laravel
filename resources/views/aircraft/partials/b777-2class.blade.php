@@ -1,27 +1,8 @@
+<!-- Cockpit Section --><x-cockpit-section :seats="$seats" />
 
-    <!-- Cockpit Section -->
-    <section class="cockpit-section">
-        <h2>Cockpit</h2>
-        <div class="cockpit-grid">
-            @foreach(['captain', 'observer1', 'observer2', 'copilot'] as $seatId)
-                @php
-                    $seat = $seats[$seatId] ?? null;
-                    $status = $seat?->status ?? 'no-data';
-                    $expiryDate = $seat?->expiry_date?->format('j M Y') ?? '-';
-                @endphp
-                <div class="seat-card cockpit-seat status-{{ $status }}" data-seat="{{ $seatId }}">
-                    <div class="seat-label">{{ ucfirst(str_replace(['1', '2'], [' 1', ' 2'], $seatId)) }}</div>
-                    <div class="seat-date" data-date="{{ $seat?->expiry_date?->format('Y-m-d') ?? '' }}">
-                        {{ $expiryDate }}
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    </section>
-
-    <!-- Attendant Door 1 (Forward) -->
+    <!-- Attendant Door 1 (Forward) - 4 seats: door-1L, center door-1 x2, door-1R -->
     <section class="cabin-section">
-        <h2>Attendant Door 1</h2>
+        <h2>🧑‍✈️ Attendant Door 1</h2>
         <div class="seat-grid">
             <div class="grid-header grid-row-2-2">
                 <span class="col-label col-header" data-col="att/d1-L">L</span>
@@ -64,17 +45,17 @@
         </div>
     </section>
 
-    <!-- Business Class - Rows 6-12 -->
+    <!-- Business Class - Rows 6-12 (Staggered: even=C,E,F,H odd=A,D,G,K, row 12 only E,F) -->
     <section class="cabin-section">
-        <h2>Business Class - Rows 6-12</h2>
+        <h2>💼 Business Class - Rows 6-12</h2>
         <div class="seat-grid grid-business">
             <div class="grid-header-business">
                 <span class="col-label">A/C</span>
-                <span class="aisle-gap"></span>
+                <span class="aisle-gap">🚶</span>
                 <span class="col-label">D/E</span>
                 <span class="col-label row-label">Row</span>
                 <span class="col-label">G/F</span>
-                <span class="aisle-gap"></span>
+                <span class="aisle-gap">🚶</span>
                 <span class="col-label">K/H</span>
             </div>
             @php
@@ -95,7 +76,7 @@
                         {{-- Full row with 4 seats --}}
                         @php $col = $cols[0];
                             $seat = $seats["{$row}{$col}"] ?? null;
-                            $status = $seat?->status ?? 'no-data'; @endphp
+                        $status = $seat?->status ?? 'no-data'; @endphp
                         <div class="seat-card status-{{ $status }}" data-seat="{{ $row }}{{ $col }}" data-row="{{ $row }}"
                             data-col="{{ $col }}">
                             <div class="seat-id">{{ $row }}{{ $col }}</div>
@@ -105,7 +86,7 @@
                         <div class="aisle-gap"></div>
                         @php $col = $cols[1];
                             $seat = $seats["{$row}{$col}"] ?? null;
-                            $status = $seat?->status ?? 'no-data'; @endphp
+                        $status = $seat?->status ?? 'no-data'; @endphp
                         <div class="seat-card status-{{ $status }}" data-seat="{{ $row }}{{ $col }}" data-row="{{ $row }}"
                             data-col="{{ $col }}">
                             <div class="seat-id">{{ $row }}{{ $col }}</div>
@@ -115,7 +96,7 @@
                         <div class="row-number" data-row="{{ $row }}">{{ $row }}</div>
                         @php $col = $cols[2];
                             $seat = $seats["{$row}{$col}"] ?? null;
-                            $status = $seat?->status ?? 'no-data'; @endphp
+                        $status = $seat?->status ?? 'no-data'; @endphp
                         <div class="seat-card status-{{ $status }}" data-seat="{{ $row }}{{ $col }}" data-row="{{ $row }}"
                             data-col="{{ $col }}">
                             <div class="seat-id">{{ $row }}{{ $col }}</div>
@@ -125,7 +106,7 @@
                         <div class="aisle-gap"></div>
                         @php $col = $cols[3];
                             $seat = $seats["{$row}{$col}"] ?? null;
-                            $status = $seat?->status ?? 'no-data'; @endphp
+                        $status = $seat?->status ?? 'no-data'; @endphp
                         <div class="seat-card status-{{ $status }}" data-seat="{{ $row }}{{ $col }}" data-row="{{ $row }}"
                             data-col="{{ $col }}">
                             <div class="seat-id">{{ $row }}{{ $col }}</div>
@@ -138,7 +119,7 @@
                         <div class="aisle-gap"></div>
                         @php $col = $cols[0];
                             $seat = $seats["{$row}{$col}"] ?? null;
-                            $status = $seat?->status ?? 'no-data'; @endphp
+                        $status = $seat?->status ?? 'no-data'; @endphp
                         <div class="seat-card status-{{ $status }}" data-seat="{{ $row }}{{ $col }}" data-row="{{ $row }}"
                             data-col="{{ $col }}">
                             <div class="seat-id">{{ $row }}{{ $col }}</div>
@@ -148,7 +129,7 @@
                         <div class="row-number" data-row="{{ $row }}">{{ $row }}</div>
                         @php $col = $cols[1];
                             $seat = $seats["{$row}{$col}"] ?? null;
-                            $status = $seat?->status ?? 'no-data'; @endphp
+                        $status = $seat?->status ?? 'no-data'; @endphp
                         <div class="seat-card status-{{ $status }}" data-seat="{{ $row }}{{ $col }}" data-row="{{ $row }}"
                             data-col="{{ $col }}">
                             <div class="seat-id">{{ $row }}{{ $col }}</div>
@@ -163,9 +144,9 @@
         </div>
     </section>
 
-    <!-- Attendant Door 2 -->
+    <!-- Attendant Door 2 (Above Economy) - 2 seats: A and K -->
     <section class="cabin-section">
-        <h2>Attendant Door 2</h2>
+        <h2>🧑‍✈️ Attendant Door 2</h2>
         <div class="seat-grid">
             <div class="grid-header grid-row-2-2">
                 <span class="col-label col-header" data-col="att/d2-L">L</span>
@@ -206,9 +187,9 @@
         </div>
     </section>
 
-    <!-- Economy Class 1 - Rows 21-36 -->
+    <!-- Economy Class 1 - Rows 21-36 (3-3-3 layout: ABC - DFG - HJK) -->
     <section class="cabin-section">
-        <h2>Economy Class - Rows 21-36</h2>
+        <h2>🪑 Economy Class - Rows 21-36</h2>
         <div class="seat-grid">
             <div class="grid-header grid-row-3-3-3">
                 <span class="col-label col-header" data-col="A">A</span>
@@ -249,9 +230,9 @@
         </div>
     </section>
 
-    <!-- Attendant Door 3 -->
+    <!-- Attendant Door 3 (Between row 36-37) - 2 seats: A and K -->
     <section class="cabin-section">
-        <h2>Attendant Door 3</h2>
+        <h2>🧑‍✈️ Attendant Door 3</h2>
         <div class="seat-grid">
             <div class="grid-header grid-row-2-2">
                 <span class="col-label col-header" data-col="att/d3-L">L</span>
@@ -294,7 +275,7 @@
 
     <!-- Economy Class 2 - Rows 37-49 -->
     <section class="cabin-section">
-        <h2>Economy Class - Rows 37-49</h2>
+        <h2>🪑 Economy Class - Rows 37-49</h2>
         <div class="seat-grid">
             <div class="grid-header grid-row-3-3-3">
                 <span class="col-label col-header" data-col="A">A</span>
@@ -334,9 +315,9 @@
         </div>
     </section>
 
-    <!-- Attendant Door 4 -->
+    <!-- Attendant Door 4 (Between row 49-50) - 2 seats: A and K -->
     <section class="cabin-section">
-        <h2>Attendant Door 4</h2>
+        <h2>🧑‍✈️ Attendant Door 4</h2>
         <div class="seat-grid">
             <div class="grid-header grid-row-2-2">
                 <span class="col-label col-header" data-col="att/d4-L">L</span>
@@ -377,9 +358,9 @@
         </div>
     </section>
 
-    <!-- Economy Class 3 - Rows 50-63 -->
+    <!-- Economy Class 3 - Rows 50-63 (row 63 has exceptions) -->
     <section class="cabin-section">
-        <h2>Economy Class - Rows 50-63</h2>
+        <h2>🪑 Economy Class - Rows 50-63</h2>
         <div class="seat-grid">
             <div class="grid-header grid-row-3-3-3">
                 <span class="col-label col-header" data-col="A">A</span>
@@ -419,9 +400,9 @@
         </div>
     </section>
 
-    <!-- Attendant Door 5 -->
+    <!-- Attendant Door 5 (Aft, below row 63) - 6 seats: LL, LC, LR, RL, RC, RR -->
     <section class="cabin-section">
-        <h2>Attendant Door 5</h2>
+        <h2>🧑‍✈️ Attendant Door 5</h2>
         <div class="seat-grid">
             <div class="grid-header grid-row-3-3">
                 <span class="col-label col-header" data-col="att/d5-LL">LL</span>
@@ -466,9 +447,9 @@
         </div>
     </section>
 
-    <!-- Spare Section -->
+    <!-- Spare Section: PAX & INF -->
     <section class="cabin-section">
-        <h2>Spare</h2>
+        <h2>📦 Spare</h2>
         <div class="spare-grid">
             <!-- PAX Column -->
             <div class="spare-column" id="pax-column">

@@ -278,12 +278,13 @@
     <div class="content">
         <!-- Reusing the Blade Partial -->
         <!-- Note: We use 'include' dyanmically. The partial must assume $seats matches the structure. -->
-        @if(View::exists('reports.templates.' . $aircraft->layout))
-            @include('reports.templates.' . $aircraft->layout)
+        @if(View::exists('aircraft.partials.' . $aircraft->layout))
+            @include('aircraft.partials.' . $aircraft->layout)
         @else
             <div style="text-align: center; padding: 50px; color: red;">
-                PDF Template for layout '{{ $aircraft->layout }}' not found.<br>
-                Please create file: <code>resources/views/reports/templates/{{ $aircraft->layout }}.blade.php</code>
+                Layout '{{ $aircraft->layout }}' not found.<br>
+                Please create file: <code>resources/views/aircraft/partials/{{ $aircraft->layout }}.blade.php</code><br>
+                <small>PDF export now uses the same layouts as the aircraft view.</small>
             </div>
         @endif
     </div>
