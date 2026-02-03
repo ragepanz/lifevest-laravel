@@ -23,6 +23,7 @@
     
     /* Neutrals */
     --bg-dark: #0f172a;
+    --bg-gradient-end: #1a1a2e; /* Setup for gradient variable */
     --bg-card: #1e293b;
     --bg-hover: #334155;
     --border: #475569;
@@ -52,6 +53,191 @@
     --transition-normal: 250ms ease;
 }
 
+
+/* --- EXCEL-STYLE LIGHT THEME (PURE WHITE) --- */
+[data-theme="light"] {
+    /* Pure White "Paper/Sheet" Palette with Soft Background Contrast */
+    --bg-dark: #f8fafc;       /* Slate 50 (Very Soft Grey Background) */
+    --bg-gradient-end: #f1f5f9; /* Slate 100 (Subtle Gradient effect) */
+    --bg-card: #ffffff;       /* Pure White Cards (Pops out) */
+    --bg-hover: #f1f5f9;      /* Very Light Grey (Row Hover) */
+    --border: #000000;        /* Bold Black Borders */
+    
+    --text-primary: #0f172a;  /* Sharp Black (Slate 900) */
+    --text-secondary: #334155;/* Slate 700 */
+    --text-muted: #64748b;    /* Slate 500 */
+    
+    /* Remove shadows for "Flat" Excel look */
+    --shadow-sm: none;
+    --shadow-md: 0 1px 3px rgba(0,0,0,0.05); /* Minimal lift */
+}
+
+/* Light Mode Component Overrides */
+[data-theme="light"] .navbar {
+    background: #ffffff; /* Solid White */
+    border-bottom: 2px solid var(--border);
+    box-shadow: none; /* Remove shadow, keep border */
+}
+
+[data-theme="light"] .navbar-search {
+    background: #ffffff;
+    border: 2px solid var(--border);
+}
+
+[data-theme="light"] .navbar-search input {
+    color: var(--text-primary);
+}
+
+[data-theme="light"] .navbar-search .search-icon {
+    color: var(--text-muted);
+}
+
+[data-theme="light"] .navbar-filter select {
+    background: #ffffff;
+    color: var(--text-primary);
+    border: 2px solid var(--border);
+}
+
+[data-theme="light"] .btn-back {
+    color: var(--text-secondary);
+}
+
+[data-theme="light"] .btn-back:hover {
+    color: var(--primary-dark);
+    background: #f1f5f9;
+}
+
+[data-theme="light"] .navbar-update {
+    background: #ffffff;
+    border: 2px solid var(--border);
+    color: var(--text-secondary);
+}
+
+[data-theme="light"] .seat-card {
+    border: 2px solid var(--border); /* Sharp Grid Border */
+    box-shadow: none;
+}
+
+[data-theme="light"] .legend {
+    border: 2px solid var(--border);
+}
+
+[data-theme="light"] .cockpit-section,
+[data-theme="light"] .cabin-section {
+    border: 2px solid var(--border);
+    border: 2px solid var(--border);
+    box-shadow: none;
+}
+
+/* Fix Button Hover in Light Mode (Black BG + White Text) */
+[data-theme="light"] .btn-secondary:hover {
+    background: #000000;
+    color: #ffffff;
+    border-color: #000000;
+}
+
+/* Fix Progress Bar Background in Light Mode */
+[data-theme="light"] .progress-bar {
+    background-color: #e2e8f0; /* Soft Grey for empty value */
+    border: 1px solid var(--border); /* Optional: add border for definition */
+}
+
+/* Fix "No Data" segment in Light Mode */
+[data-theme="light"] .progress-segment.no-data {
+    background-color: #f1f5f9;
+}
+
+/* Fix "No Data" segment in Light Mode */
+[data-theme="light"] .progress-segment.no-data {
+    background-color: #f1f5f9;
+}
+
+/* Dashboard / Home Page Overrides for Bold Borders */
+[data-theme="light"] .fleet-card {
+    border: 2px solid var(--border);
+    box-shadow: none;
+}
+
+[data-theme="light"] .summary-card {
+    border: 2px solid var(--border);
+    box-shadow: none;
+}
+
+[data-theme="light"] .airline-header {
+    border-bottom: 2px solid var(--border) !important;
+}
+
+[data-theme="light"] .filter-bar {
+    border: 2px solid var(--border);
+    box-shadow: none;
+}
+
+[data-theme="light"] .stats-section, 
+[data-theme="light"] .summary-section {
+    /* Optional: if these sections need borders, add them here. 
+       Currently they are containers, often transparent. */
+}
+
+/* ========================================
+   THEME TOGGLE SWITCH
+   ======================================== */
+/* The switch - the box around the slider */
+.theme-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+  margin-right: 10px;
+}
+
+/* Hide default HTML checkbox */
+.theme-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #1e293b; /* Dark Slate (Night Sky) */
+  transition: .4s;
+  border-radius: 34px;
+  border: 1px solid #475569; /* Subtle border */
+}
+
+.slider:before {
+  position: absolute;
+  content: "🌙"; /* Moon Icon by default */
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 2px;
+  background-color: transparent; /* No white circle, just icon */
+  transition: .4s;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+/* On/Checked State (Light Mode) */
+input:checked + .slider {
+  background-color: #38bdf8; /* Sky Blue (Day Sky) */
+  border-color: #0ea5e9;
+}
+
+input:checked + .slider:before {
+  transform: translateX(24px);
+  content: "☀️"; /* Sun Icon when active */
+}
+
 /* Reset & Base */
 *, *::before, *::after {
     box-sizing: border-box;
@@ -61,7 +247,7 @@
 
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: linear-gradient(135deg, var(--bg-dark) 0%, #1a1a2e 100%);
+    background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-gradient-end) 100%);
     color: var(--text-primary);
     min-height: 100vh;
     line-height: 1.5;
@@ -86,7 +272,7 @@ body {
     left: 0;
     right: 0;
     z-index: 1000;
-    background: rgba(30, 41, 59, 0.85); /* Glassmorphism base */
+    background: rgba(30, 41, 59, 0.85); /* Glassmorphism base (Default Dark) */
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid rgba(71, 85, 105, 0.5);

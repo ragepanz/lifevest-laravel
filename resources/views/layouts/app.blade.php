@@ -39,6 +39,12 @@
 
             <!-- Right: Admin & Update -->
             <div class="navbar-right" style="display: flex; gap: 1rem; align-items: center;">
+                <!-- Theme Toggle Switch -->
+                <label class="theme-switch" title="Toggle Theme (Green = Light)">
+                    <input type="checkbox" id="theme-toggle-checkbox">
+                    <span class="slider"></span>
+                </label>
+
                 @if(request()->routeIs('dashboard'))
                     <a href="{{ route('fleet.index') }}" class="btn btn-sm btn-secondary"
                         style="text-decoration: none; display: flex; align-items: center; gap: 5px;">
@@ -73,6 +79,35 @@
     </div>
 
     @stack('scripts')
+    
+    <script>
+        // Theme Toggle Logic (Switch)
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleCheckbox = document.getElementById('theme-toggle-checkbox');
+            const html = document.documentElement;
+
+            // Check saved theme
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                html.setAttribute('data-theme', 'light');
+                toggleCheckbox.checked = true; // Set switch to ON (Green)
+            } else {
+                toggleCheckbox.checked = false; // Set switch to OFF (Dark)
+            }
+
+            toggleCheckbox.addEventListener('change', () => {
+                if (toggleCheckbox.checked) {
+                    // Switch to Light Mode
+                    html.setAttribute('data-theme', 'light');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    // Switch to Dark Mode
+                    html.removeAttribute('data-theme');
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
