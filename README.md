@@ -9,6 +9,7 @@ Aplikasi pelacakan tanggal kedaluwarsa life vest untuk armada pesawat GMF AeroAs
 - [Cara Menjalankan](#-cara-menjalankan)
 - [Panduan Penggunaan](#-panduan-penggunaan)
 - [Keyboard Shortcuts](#-keyboard-shortcuts)
+- [PDF Export & Blank Form](#-pdf-export--blank-form)
 - [Fleet Manager](#️-fleet-manager)
 - [Airlines Management](#-airlines-management)
 - [Menambahkan Pesawat Baru](#-menambahkan-pesawat-baru)
@@ -66,6 +67,7 @@ Buka http://localhost:8000
   - Filter berdasarkan **Status** (Active/Prolong)
   - Filter berdasarkan **Health** (Safe/Warning/Critical)
 - **Fleet Manager**: Kelola data pesawat & airline via tombol "Manage Fleet" di navbar
+- **Dark/Light Mode**: Toggle tema via tombol 🌙/☀️ di navbar
 - Klik kartu pesawat untuk masuk ke halaman seat map
 
 ---
@@ -126,6 +128,20 @@ Buka http://localhost:8000
 
 ---
 
+## 📄 PDF Export & Blank Form
+
+### Export PDF
+Export seat map sebagai PDF report dengan warna status dan tanggal expiry.
+- Klik tombol **"Export PDF"** di toolbar halaman seat map
+- PDF akan terbuka di tab baru
+
+### Blank Form
+Export formulir kosong untuk teknisi (kotak lebih besar untuk tulisan tangan).
+- Klik tombol **"Blank Form"** di toolbar halaman seat map
+- Form menyediakan kolom untuk pengisian manual di lapangan
+
+---
+
 ## ⚙️ Fleet Manager
 
 Halaman **Fleet Manager** (`/fleet`) adalah pusat kontrol data pesawat dan airline. Tersedia dalam format **Tab**:
@@ -182,14 +198,18 @@ Untuk menambahkan pesawat dengan layout yang sudah ada:
 Jika Anda memiliki pesawat dengan konfigurasi kursi yang **belum pernah ada** (template kursi baru):
 
 1. **Buat Template Blade**:
-   Copy file di `resources/views/aircraft/` (misal `a330-300c.blade.php`), rename jadi `a330-XXX.blade.php`, lalu edit kursinya.
-2. **Auto-Detect**:
+   - Copy file di `resources/views/aircraft/` (misal `a330-300c.blade.php`), rename jadi `a330-XXX.blade.php`
+   - Template ini adalah wrapper yang memanggil partial
+2. **Buat Partial**:
+   - Copy file di `resources/views/aircraft/partials/` (misal `a330-300a.blade.php`)
+   - Edit konfigurasi kursi di partial tersebut
+3. **Auto-Detect**:
    Sistem akan **otomatis** mendeteksi file baru tersebut.
    Saat tambah pesawat di Fleet Manager, pilihan `a330-XXX` akan langsung muncul di dropdown layout.
-3. **Konfigurasi Baris**:
+4. **Konfigurasi Baris**:
    Edit `config/aircraft_class_rows.php` untuk menentukan mana baris bisnis/ekonomi.
 
-> 💡 **Tip:** Nama file template akan otomatis dikonversi jadi nama layout (contoh: `a330-XXX.blade.php` -> `A330 XXX`).
+> 💡 **Tip:** Template di `aircraft/` hanya menyediakan struktur halaman. Logika seat map ada di `aircraft/partials/`.
 
 ---
 
@@ -201,11 +221,9 @@ lifevest-laravel/
 │   └── aircraft_class_rows.php   # Config class type per layout
 ├── database/
 │   ├── migrations/
-│   │   ├── create_airlines_table.php    # Tabel airlines
-│   │   ├── create_aircraft_table.php    # Tabel aircraft
-│   │   └── add_airline_id_to_aircraft_table.php
 │   └── seeders/
-│       └── AircraftSeeder.php    # Initial Data Pesawat & Layouts
+│       ├── AircraftSeeder.php    # Initial Data Pesawat
+│       └── AirlineSeeder.php     # Initial Data Airlines
 ├── app/
 │   ├── Models/
 │   │   ├── Aircraft.php          # Model pesawat (belongsTo Airline)
@@ -214,40 +232,36 @@ lifevest-laravel/
 │   └── Http/Controllers/
 │       ├── DashboardController.php   # Logic dashboard (grouped by airline)
 │       ├── FleetController.php       # Logic CRUD Pesawat & Airlines
-│       └── AircraftController.php    # Logic seat map & update expiry
+│       ├── AircraftController.php    # Logic seat map & update expiry
+│       └── ReportController.php      # Logic PDF Export & Blank Form
 ├── resources/views/
-│   ├── layouts/app.blade.php     # Master layout + Navbar
+│   ├── layouts/app.blade.php     # Master layout + Navbar + Dark Mode
 │   ├── dashboard.blade.php       # Halaman dashboard (with filters)
-│   ├── fleet/
-│   │   ├── index.blade.php       # Fleet Manager (Tabs: Aircraft & Airlines)
-│   │   ├── create.blade.php      # Form tambah pesawat
-│   │   ├── edit.blade.php        # Form edit pesawat
-│   │   ├── airline-create.blade.php  # Form tambah airline
-│   │   └── airline-edit.blade.php    # Form edit airline
-│   ├── aircraft/
-│   │   ├── b737-e46.blade.php    # B737 Layout (46 rows)
-│   │   ├── b737-e47.blade.php    # B737 Layout (47 rows)
-│   │   ├── b737-e48.blade.php    # B737 Layout (48 rows)
-│   │   ├── b777-2class.blade.php # B777 2-Class
-│   │   ├── b777-3class.blade.php # B777 3-Class (First)
-│   │   ├── a330-900a.blade.php   # A330-900 Layout A
-│   │   ├── a330-900b.blade.php   # A330-900 Layout B
+│   ├── fleet/                    # Fleet Manager views
+│   ├── aircraft/                 # Template wrapper per layout
+│   │   ├── b737-e46.blade.php
+│   │   ├── b777-3class.blade.php
+│   │   ├── a330-300a.blade.php
+│   │   └── ... (16 layouts)
+│   ├── aircraft/partials/        # ⭐ Seat map layouts (reusable)
+│   │   ├── b737-e46.blade.php    # B737 seat configuration
+│   │   ├── b777-3class.blade.php # B777 3-class configuration
 │   │   ├── a330-300a.blade.php   # A330-300 Layout A
-│   │   ├── a330-300b.blade.php   # A330-300 Layout B
-│   │   ├── a330-300c.blade.php   # A330-300 Layout C (All Economy)
-│   │   ├── a330-200a.blade.php   # A330-200 Layout A
-│   │   ├── a330-200b.blade.php   # A330-200 Layout B
-│   │   ├── a320a.blade.php       # A320 Layout
-│   │   └── atr72.blade.php       # ATR72-600 Layout
-│   └── components/
+│   │   ├── a330-300cargo.blade.php # A330-300 Cargo
+│   │   └── ... (16 partials)
+│   ├── reports/                  # ⭐ PDF Reports
+│   │   ├── seat-map.blade.php    # PDF Export template
+│   │   └── blank-form.blade.php  # Blank Form template
+│   └── components/               # Reusable Blade components
 │       ├── cockpit-section.blade.php
 │       ├── seat-cell.blade.php
-│       ├── toolbar.blade.php
+│       ├── toolbar.blade.php     # Sticky toolbar + Export buttons
 │       ├── status-legend.blade.php
+│       ├── aircraft-header-info.blade.php
 │       └── date-modal.blade.php
 └── resources/
     ├── css/
-    │   ├── style.css             # CSS global + Navbar
+    │   ├── style.css             # CSS global + Dark/Light mode
     │   └── dashboard.css         # CSS dashboard
     └── js/
         └── app.js                # JavaScript interaksi
@@ -276,7 +290,7 @@ lifevest-laravel/
 | **A330-300** | 14 | 300a, 300b, 300c, Cargo |
 | **A330-341** | 2 | 300c |
 | **A330-200** | 5 | 200a, 200b |
-| **A320-200** | - | a320a |
+| **A320-200** | 50 | a320a |
 | **ATR72-600** | 3 | atr72 |
 
 ---
