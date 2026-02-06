@@ -86,26 +86,26 @@
 
         /* BLANK FORM: Larger Seat Cards for Handwriting */
         .seat-card {
-            width: 50px;
-            /* LARGER than report */
-            height: 60px;
-            /* TALLER for writing */
+            width: 60px;
+            /* LANDSCAPE - wider than tall */
+            height: 38px;
+            /* Compact landscape for easy date writing */
             border: 2px solid #333;
             /* Thicker border */
             background: #fff;
             display: inline-block;
-            margin: 2px 3px;
+            margin: 1px 1px;
             text-align: center;
             vertical-align: top;
-            padding: 3px 2px;
+            padding: 2px 2px;
             border-radius: 4px;
             box-sizing: border-box;
         }
 
         /* Cockpit seats - also larger */
         .cockpit-seat {
-            width: 90px;
-            height: 60px;
+            width: 80px;
+            height: 38px;
         }
 
         .seat-label {
@@ -131,49 +131,48 @@
 
         /* Hide dates - show blank space for writing */
         .seat-date {
-            font-size: 8px;
-            color: #999;
-            min-height: 30px;
-            /* Space for handwriting */
             font-size: 7px;
+            color: #999;
+            min-height: 14px;
+            /* Space for handwriting - compact landscape */
             color: #bbb;
         }
 
         /* Headers Columns (A, B, C...) */
         .col-header {
-            width: 50px;
+            width: 60px;
             display: inline-block;
             font-weight: bold;
-            font-size: 9px;
+            font-size: 8px;
             text-align: center;
-            margin: 2px 3px;
+            margin: 1px 1px;
         }
 
         /* Row Number */
         .row-number {
-            width: 25px;
+            width: 20px;
             display: inline-block;
             font-weight: bold;
             text-align: center;
             vertical-align: middle;
-            line-height: 60px;
-            font-size: 9px;
+            line-height: 38px;
+            font-size: 8px;
         }
 
         .row-label {
-            width: 25px;
+            width: 20px;
             display: inline-block;
-            font-size: 8px;
+            font-size: 7px;
         }
 
         /* Spacers */
         .seat-placeholder {
-            width: 56px;
+            width: 62px;
             display: inline-block;
         }
 
         .aisle-gap {
-            width: 15px;
+            width: 8px;
             display: inline-block;
         }
 
