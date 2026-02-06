@@ -86,7 +86,7 @@
 
         /* BLANK FORM: Larger Seat Cards for Handwriting */
         .seat-card {
-            width: 60px;
+            width: 55px;
             /* LANDSCAPE - wider than tall */
             height: 38px;
             /* Compact landscape for easy date writing */
@@ -140,7 +140,7 @@
 
         /* Headers Columns (A, B, C...) */
         .col-header {
-            width: 60px;
+            width: 55px;
             display: inline-block;
             font-weight: bold;
             font-size: 8px;
@@ -167,12 +167,12 @@
 
         /* Spacers */
         .seat-placeholder {
-            width: 62px;
+            width: 57px;
             display: inline-block;
         }
 
         .aisle-gap {
-            width: 8px;
+            width: 5px;
             display: inline-block;
         }
 

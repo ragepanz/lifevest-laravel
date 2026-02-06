@@ -1,4 +1,4 @@
-@props(['seats'])
+@props(['seats', 'isPdfExport' => false])
 
 <!-- Cockpit Section -->
 <section class="cockpit-section">
@@ -8,7 +8,8 @@
             @php
                 $seat = $seats[$seatId] ?? null;
                 $status = $seat?->status ?? 'no-data';
-                $expiryDate = $seat?->expiry_date?->format('j M Y') ?? 'Click to set';
+                $dateFormat = isset($isPdfExport) && $isPdfExport ? 'd/m/Y' : 'j M Y';
+                $expiryDate = $seat?->expiry_date?->format($dateFormat) ?? 'Click to set';
             @endphp
             <div class="seat-card cockpit-seat status-{{ $status }}" data-seat="{{ $seatId }}">
                 <div class="seat-label">{{ ucfirst(str_replace(['1', '2'], [' 1', ' 2'], $seatId)) }}</div>

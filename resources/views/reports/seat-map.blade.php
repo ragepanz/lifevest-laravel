@@ -82,9 +82,10 @@
 
         /* Seat Card Refined */
         .seat-card {
-            width: 38px;
-            /* Slightly narrower to fit A4 */
-            height: 48px;
+            width: 65px;
+            /* Wider for landscape date */
+            height: 45px;
+            /* Shorter height */
             border: 1px solid #ccc;
             background: #fff;
             display: inline-block;
@@ -96,12 +97,13 @@
             border-radius: 4px;
             box-sizing: border-box;
             /* Proper sizing */
+            overflow: hidden;
+            white-space: normal;
         }
 
-        /* Cockpit specific */
         .cockpit-seat {
-            width: 80px;
-            height: 50px;
+            width: 85px;
+            height: 55px;
         }
 
         .seat-label {
@@ -147,18 +149,28 @@
         .seat-id {
             font-size: 10px;
             font-weight: bold;
-            margin-bottom: 2px;
+            margin-bottom: 3px;
+            /* Added spacing */
         }
 
         .seat-date {
-            font-size: 7px;
-            color: #555;
+            font-size: 11px !important;
+            /* Slightly safer than 12px for full date */
+            color: #222 !important;
+            font-weight: 500 !important;
+            line-height: 1.1 !important;
+            display: block !important;
+            width: 100% !important;
+            text-align: center !important;
+            white-space: nowrap !important;
+            /* Keep on one line */
+            overflow: hidden;
+            letter-spacing: -0.2px !important;
         }
 
-        /* Headers Columns (A, B, C...) */
         .col-header {
-            width: 38px;
-            /* Match seat width */
+            width: 65px;
+            /* Match new seat width */
             display: inline-block;
             font-weight: bold;
             font-size: 9px;
@@ -166,32 +178,31 @@
             margin: 1px 2px;
         }
 
-        /* Row Number */
         .row-number {
-            width: 30px;
+            width: 25px;
             /* Specific width for row num */
             display: inline-block;
             font-weight: bold;
             text-align: center;
             vertical-align: middle;
-            line-height: 48px;
-            /* Center text vertically */
+            line-height: 45px;
+            /* Match new seat height */
         }
 
         .row-label {
-            width: 30px;
+            width: 25px;
             display: inline-block;
             font-size: 8px;
         }
 
-        /* Spacers - Must match seat width + margin */
         .seat-placeholder {
-            width: 42px;
+            width: 69px;
+            /* 65px + 4px margin */
             display: inline-block;
         }
 
         .aisle-gap {
-            width: 20px;
+            width: 10px;
             display: inline-block;
         }
 
@@ -246,16 +257,16 @@
            using inline style="display: flex" need override.
            This is a MINIMAL fix targeting only those sections.
            ============================================= */
-        
+
         /* Force inline-block for column wrappers inside flex containers */
-        .cabin-section > div[style] > div[style] {
+        .cabin-section>div[style]>div[style] {
             display: inline-block;
             vertical-align: top;
             margin: 0 20px;
         }
 
         /* Force inline-block for seat cards in nested flex containers */
-        .cabin-section > div[style] > div[style] > div[style] > .seat-card {
+        .cabin-section>div[style]>div[style]>div[style]>.seat-card {
             display: inline-block;
             margin: 0 3px;
         }

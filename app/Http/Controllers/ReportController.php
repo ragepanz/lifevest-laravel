@@ -37,7 +37,8 @@ class ReportController extends Controller
         $pdf = Pdf::loadView('reports.seat-map', [
             'aircraft' => $aircraft,
             'registration' => $registration,
-            'seats' => $seats
+            'seats' => $seats,
+            'isPdfExport' => true,
         ]);
 
         // 3. Setup paper
