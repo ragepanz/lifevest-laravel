@@ -87,25 +87,27 @@
         /* BLANK FORM: Larger Seat Cards for Handwriting */
         .seat-card {
             width: 55px;
-            /* LANDSCAPE - wider than tall */
-            height: 38px;
-            /* Compact landscape for easy date writing */
+            /* Fit to page width */
+            height: 40px;
+            /* Landscape aspect ratio */
             border: 2px solid #333;
             /* Thicker border */
             background: #fff;
             display: inline-block;
-            margin: 1px 1px;
+            margin: 1px 2px;
             text-align: center;
             vertical-align: top;
             padding: 2px 2px;
             border-radius: 4px;
             box-sizing: border-box;
+            overflow: hidden;
+            white-space: nowrap;
         }
 
         /* Cockpit seats - also larger */
         .cockpit-seat {
             width: 80px;
-            height: 38px;
+            height: 45px;
         }
 
         .seat-label {
@@ -132,10 +134,9 @@
         /* Hide dates - show blank space for writing */
         .seat-date {
             font-size: 7px;
-            color: #999;
+            color: #bbb;
             min-height: 14px;
             /* Space for handwriting - compact landscape */
-            color: #bbb;
         }
 
         /* Headers Columns (A, B, C...) */
@@ -145,29 +146,30 @@
             font-weight: bold;
             font-size: 8px;
             text-align: center;
-            margin: 1px 1px;
+            margin: 1px 2px;
         }
 
         /* Row Number */
         .row-number {
-            width: 20px;
+            width: 25px;
             display: inline-block;
             font-weight: bold;
             text-align: center;
             vertical-align: middle;
-            line-height: 38px;
+            line-height: 40px;
             font-size: 8px;
         }
 
         .row-label {
-            width: 20px;
+            width: 25px;
             display: inline-block;
             font-size: 7px;
         }
 
         /* Spacers */
         .seat-placeholder {
-            width: 57px;
+            width: 59px;
+            /* 55px + 4px margin */
             display: inline-block;
         }
 
@@ -177,17 +179,29 @@
         }
 
         /* Spare Section */
+        .spare-grid {
+            page-break-inside: avoid;
+            /* Only break if it doesn't fit */
+            width: 100%;
+            margin-top: 20px;
+        }
+
         .spare-column {
-            display: inline-block;
+            display: block;
+            /* Stack vertically */
             vertical-align: top;
-            width: 45%;
+            width: 80%;
+            /* Wider box */
             border: 2px dashed #333;
-            padding: 10px;
-            margin: 1%;
+            padding: 20px;
+            /* More padding */
+            margin: 30px auto;
+            /* Center and add space */
         }
 
         .spare-items {
-            min-height: 80px;
+            min-height: 150px;
+            /* Taller box */
         }
 
         .empty-message {
