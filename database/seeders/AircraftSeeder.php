@@ -125,10 +125,10 @@ class AircraftSeeder extends Seeder
             ['registration' => 'PK-GPS', 'type' => 'A330-200', 'layout' => 'a330-200b', 'status' => 'prolong', 'airline_id' => 1],
             ['registration' => 'PK-GPL', 'type' => 'A330-200', 'layout' => 'a330-200b', 'status' => 'prolong', 'airline_id' => 1],
 
+            // ===== CITILINK (airline_id: 2) =====
             // ATR72-600 Layout: atr72
-            ['registration' => 'PK-GAF', 'type' => 'ATR72-600', 'layout' => 'atr72', 'status' => 'prolong', 'airline_id' => 1],
-            ['registration' => 'PK-GAI', 'type' => 'ATR72-600', 'layout' => 'atr72', 'status' => 'prolong', 'airline_id' => 1],
-            ['registration' => 'PK-GAJ', 'type' => 'ATR72-600', 'layout' => 'atr72', 'status' => 'prolong', 'airline_id' => 1],
+            ['registration' => 'PK-GJT', 'type' => 'ATR72-600', 'layout' => 'atr72', 'status' => 'active', 'airline_id' => 2],
+            ['registration' => 'PK-GJV', 'type' => 'ATR72-600', 'layout' => 'atr72', 'status' => 'active', 'airline_id' => 2],
 
             // ===== CITILINK (airline_id: 2) =====
             ['registration' => 'PK-GLE', 'type' => 'A320-233', 'layout' => 'a320a', 'status' => 'active', 'airline_id' => 2],
