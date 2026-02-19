@@ -174,5 +174,193 @@ class AircraftController extends Controller
             'message' => 'Seat not found',
         ], 404);
     }
+
+    /**
+     * Show Batch Input Form (Economy Only) - Sectioned
+     */
+    public function batchInput(string $registration)
+    {
+        $aircraft = \App\Models\Aircraft::where('registration', $registration)->firstOrFail();
+        $layout = $aircraft->layout ?? 'b737-e46'; // fallback
+
+        // Get Economy Sections from config
+        $sections = config("aircraft_economy_sections.{$layout}", []);
+
+        // Fallback if config missing
+        if (empty($sections)) {
+            $sections = [
+                ['name' => 'Economy Class', 'rows' => range(21, 46), 'columns' => ['A', 'B', 'C', 'H', 'J', 'K']]
+            ];
+        }
+
+        return view('aircraft.batch-input', [
+            'registration' => $registration,
+            'aircraft' => $aircraft,
+            'sections' => $sections,
+        ]);
+    }
+
+    /**
+     * Store Batch Input Data - Sectioned
+     */
+    public function storeBatchInput(Request $request, string $registration)
+    {
+        $aircraft = \App\Models\Aircraft::where('registration', $registration)->firstOrFail();
+        $layout = $aircraft->layout ?? 'b737-e46';
+
+        // Get sections config
+        $sections = config("aircraft_economy_sections.{$layout}", []);
+        if (empty($sections)) {
+            $sections = [
+                ['name' => 'Economy Class', 'rows' => range(21, 46), 'columns' => ['A', 'B', 'C', 'H', 'J', 'K']]
+            ];
+        }
+
+        $savedCount = 0;
+
+        // Process each section
+        foreach ($sections as $sectionIndex => $section) {
+            $rows = $section['rows'];
+            $columns = $section['columns'];
+
+            foreach ($columns as $col) {
+                $input = $request->input("section_{$sectionIndex}_col_{$col}", '');
+                if (empty(trim($input)))
+                    continue;
+
+                $lines = array_filter(array_map('trim', preg_split('/[\r\n]+/', $input)));
+                $rowIndex = 0;
+                $lineIndex = 0;
+
+                // Get exceptions for this section
+                $paramExceptions = $section['exceptions'] ?? [];
+
+                // Process each input line
+                while ($lineIndex < count($lines)) {
+                    // Stop if we ran out of rows
+                    if ($rowIndex >= count($rows))
+                        break;
+
+                    $row = $rows[$rowIndex];
+                    $seatId = $row . $col;
+
+                    // Check if this specific seat is an exception (doesn't exist)
+                    if (in_array($seatId, $paramExceptions)) {
+                        // Skip this seat (it doesn't exist), try next row
+                        $rowIndex++;
+                        continue;
+                    }
+
+                    // This is a valid seat, use the current input line
+                    $dateStr = $lines[$lineIndex];
+                    $parsedDate = $this->parseFlexibleDate($dateStr);
+
+                    if ($parsedDate) {
+                        Seat::updateOrCreate(
+                            ['registration' => $registration, 'seat_id' => $seatId],
+                            [
+                                'row' => $row,
+                                'col' => $col,
+                                'class_type' => 'economy',
+                                'expiry_date' => $parsedDate,
+                            ]
+                        );
+                        $savedCount++;
+                    }
+
+                    // Move to next input and next row
+                    $lineIndex++;
+                    $rowIndex++;
+                }
+            }
+        }
+
+        // Process PAX Spare (auto-count from lines)
+        $paxDates = $request->input('pax_dates', '');
+        if (!empty(trim($paxDates))) {
+            $lines = array_filter(array_map('trim', preg_split('/[\r\n]+/', $paxDates)));
+            for ($i = 0; $i < count($lines); $i++) {
+                $parsedDate = $this->parseFlexibleDate($lines[$i]);
+                if ($parsedDate) {
+                    $seatId = 'pax-' . ($i + 1);
+                    Seat::updateOrCreate(
+                        ['registration' => $registration, 'seat_id' => $seatId],
+                        [
+                            'row' => null,
+                            'col' => $seatId,
+                            'class_type' => 'spare-pax',
+                            'expiry_date' => $parsedDate,
+                        ]
+                    );
+                    $savedCount++;
+                }
+            }
+        }
+
+        // Process INF Spare (auto-count from lines)
+        $infDates = $request->input('inf_dates', '');
+        if (!empty(trim($infDates))) {
+            $lines = array_filter(array_map('trim', preg_split('/[\r\n]+/', $infDates)));
+            for ($i = 0; $i < count($lines); $i++) {
+                $parsedDate = $this->parseFlexibleDate($lines[$i]);
+                if ($parsedDate) {
+                    $seatId = 'inf-' . ($i + 1);
+                    Seat::updateOrCreate(
+                        ['registration' => $registration, 'seat_id' => $seatId],
+                        [
+                            'row' => null,
+                            'col' => $seatId,
+                            'class_type' => 'spare-inf',
+                            'expiry_date' => $parsedDate,
+                        ]
+                    );
+                    $savedCount++;
+                }
+            }
+        }
+
+        return redirect()->route('aircraft.show', $registration)
+            ->with('success', "Batch input saved: {$savedCount} seats updated.");
+    }
+
+    /**
+     * Parse flexible date formats: dd/mm/yyyy, dd-mmm-yy, mmm-yy
+     */
+    private function parseFlexibleDate(string $dateStr): ?\Carbon\Carbon
+    {
+        $dateStr = trim($dateStr);
+        if (empty($dateStr))
+            return null;
+
+        $formats = [
+            'd/m/Y',     // 01/03/2030
+            'd-m-Y',     // 01-03-2030
+            'd/m/y',     // 01/03/30
+            'd-m-y',     // 01-03-30
+            'd-M-y',     // 24-Jan-25
+            'd-M-Y',     // 24-Jan-2025
+            'M-y',       // Oct-25
+            'M-Y',       // Oct-2025
+            'M/y',       // Oct/25
+            'M/Y',       // Oct/2025
+        ];
+
+        foreach ($formats as $format) {
+            try {
+                $date = \Carbon\Carbon::createFromFormat($format, $dateStr);
+                if ($date) {
+                    // For month-year only formats, set to first day
+                    if (in_array($format, ['M-y', 'M-Y', 'M/y', 'M/Y'])) {
+                        $date->startOfMonth();
+                    }
+                    return $date;
+                }
+            } catch (\Exception $e) {
+                continue;
+            }
+        }
+
+        return null;
+    }
 }
 

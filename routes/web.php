@@ -18,6 +18,10 @@ Route::prefix('aircraft')->group(function () {
 
     // Blank Form for Technicians (larger boxes for handwriting)
     Route::get('/{registration}/blank-form', [\App\Http\Controllers\ReportController::class, 'exportBlankForm'])->name('reports.blank');
+
+    // Batch Input (Economy Only)
+    Route::get('/{registration}/batch-input', [AircraftController::class, 'batchInput'])->name('aircraft.batchInput');
+    Route::post('/{registration}/batch-input', [AircraftController::class, 'storeBatchInput'])->name('aircraft.storeBatchInput');
 });
 
 // Fleet Management (CRUD)
