@@ -55,29 +55,50 @@
     <!-- Summary Section -->
     <section class="summary-section">
         <h2>📈 Fleet Overview</h2>
+
+        <!-- Fleet Type Tabs -->
+        <div class="fleet-tabs">
+            <button class="fleet-tab active" data-fleet="all"
+                data-safe="{{ $totalStats['safe'] }}"
+                data-warning="{{ $totalStats['warning'] }}"
+                data-critical="{{ $totalStats['critical'] }}"
+                data-expired="{{ $totalStats['expired'] }}">
+                All
+            </button>
+            @foreach($perFleetStats as $baseType => $stats)
+            <button class="fleet-tab" data-fleet="{{ $baseType }}"
+                data-safe="{{ $stats['safe'] }}"
+                data-warning="{{ $stats['warning'] }}"
+                data-critical="{{ $stats['critical'] }}"
+                data-expired="{{ $stats['expired'] }}">
+                {{ $baseType }} <span class="fleet-tab-count">{{ $stats['count'] }}</span>
+            </button>
+            @endforeach
+        </div>
+
         <div class="summary-cards">
             <div class="summary-card safe">
                 <div class="summary-icon">🟢</div>
-                <div class="summary-value">{{ $totalStats['safe'] }}</div>
+                <div class="summary-value" id="overviewSafe">{{ $totalStats['safe'] }}</div>
                 <div class="summary-label">Safe</div>
                 <div class="summary-desc">> 6 months</div>
             </div>
             <div class="summary-card warning">
                 <div class="summary-icon">🟡</div>
-                <div class="summary-value">{{ $totalStats['warning'] }}</div>
+                <div class="summary-value" id="overviewWarning">{{ $totalStats['warning'] }}</div>
                 <div class="summary-label">Warning</div>
                 <div class="summary-desc">3-6 months</div>
             </div>
             <div class="summary-card critical">
                 <div class="summary-icon">🔴</div>
-                <div class="summary-value">{{ $totalStats['critical'] }}</div>
+                <div class="summary-value" id="overviewCritical">{{ $totalStats['critical'] }}</div>
                 <div class="summary-label">Critical</div>
                 <div class="summary-desc">
                     < 3 months</div>
                 </div>
                 <div class="summary-card expired">
                     <div class="summary-icon">🟣</div>
-                    <div class="summary-value">{{ $totalStats['expired'] }}</div>
+                    <div class="summary-value" id="overviewExpired">{{ $totalStats['expired'] }}</div>
                     <div class="summary-label">Expired</div>
                     <div class="summary-desc">Past due</div>
                 </div>
@@ -242,6 +263,30 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // Fleet Overview Tab Switching
+            const fleetTabs = document.querySelectorAll('.fleet-tab');
+            const overviewSafe = document.getElementById('overviewSafe');
+            const overviewWarning = document.getElementById('overviewWarning');
+            const overviewCritical = document.getElementById('overviewCritical');
+            const overviewExpired = document.getElementById('overviewExpired');
+
+            fleetTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    fleetTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+
+                    overviewSafe.textContent = this.dataset.safe;
+                    overviewWarning.textContent = this.dataset.warning;
+                    overviewCritical.textContent = this.dataset.critical;
+                    overviewExpired.textContent = this.dataset.expired;
+
+                    // Animate values
+                    [overviewSafe, overviewWarning, overviewCritical, overviewExpired].forEach(el => {
+                        el.style.transform = 'scale(1.15)';
+                        setTimeout(() => el.style.transform = 'scale(1)', 200);
+                    });
+                });
+            });
             const toggleBtn = document.getElementById('toggleFilters');
             const filterPanel = document.getElementById('filterPanel');
             const filterArrow = document.getElementById('filterArrow');

@@ -1953,6 +1953,57 @@ vertical-align: middle;
 }
 
 /* ========================================
+   FLEET OVERVIEW TABS
+   ======================================== */
+.fleet-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.fleet-tab {
+    padding: 0.4rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.fleet-tab:hover {
+    border-color: var(--primary);
+    color: var(--text-primary);
+}
+
+.fleet-tab.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+}
+
+.fleet-tab-count {
+    font-size: 0.7rem;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 1px 6px;
+    border-radius: 10px;
+}
+
+.fleet-tab.active .fleet-tab-count {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.summary-value {
+    transition: transform 0.2s ease;
+}
+
+/* ========================================
    REPLACEMENT SUMMARY (Dashboard)
    ======================================== */
 .replacement-section {

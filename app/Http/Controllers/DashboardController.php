@@ -58,6 +58,31 @@ class DashboardController extends Controller
             ];
         }
 
+        // Build per-fleet-type stats
+        $perFleetStats = [];
+        foreach ($fleet as $registration => $acData) {
+            preg_match('/^([A-Z]+\d+)/', $acData['type'], $matches);
+            $baseType = $matches[1] ?? $acData['type'];
+
+            if (!isset($perFleetStats[$baseType])) {
+                $perFleetStats[$baseType] = [
+                    'safe' => 0,
+                    'warning' => 0,
+                    'critical' => 0,
+                    'expired' => 0,
+                    'no_data' => 0,
+                    'count' => 0,
+                ];
+            }
+            $perFleetStats[$baseType]['safe'] += $acData['stats']['safe'];
+            $perFleetStats[$baseType]['warning'] += $acData['stats']['warning'];
+            $perFleetStats[$baseType]['critical'] += $acData['stats']['critical'];
+            $perFleetStats[$baseType]['expired'] += $acData['stats']['expired'];
+            $perFleetStats[$baseType]['no_data'] += $acData['stats']['no_data'];
+            $perFleetStats[$baseType]['count']++;
+        }
+        ksort($perFleetStats);
+
         // Get global last update time
         $lastUpdate = Seat::max('updated_at');
 
@@ -151,6 +176,7 @@ class DashboardController extends Controller
             'fleet' => $fleet,
             'fleetByAirline' => $fleetByAirline,
             'totalStats' => $totalStats,
+            'perFleetStats' => $perFleetStats,
             'lastUpdate' => $lastUpdate ? \Carbon\Carbon::parse($lastUpdate) : null,
             'pnSummary' => $pnSummary,
         ]);
