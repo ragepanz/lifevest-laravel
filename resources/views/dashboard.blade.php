@@ -54,51 +54,70 @@
 
     <!-- Summary Section -->
     <section class="summary-section">
-        <h2>📈 Fleet Overview</h2>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h2>📈 Fleet Overview</h2>
 
-        <!-- Fleet Type Tabs -->
-        <div class="fleet-tabs">
-            <button class="fleet-tab active" data-fleet="all"
-                data-safe="{{ $totalStats['safe'] }}"
-                data-warning="{{ $totalStats['warning'] }}"
-                data-critical="{{ $totalStats['critical'] }}"
-                data-expired="{{ $totalStats['expired'] }}">
-                All
-            </button>
-            @foreach($perFleetStats as $baseType => $stats)
-            <button class="fleet-tab" data-fleet="{{ $baseType }}"
-                data-safe="{{ $stats['safe'] }}"
-                data-warning="{{ $stats['warning'] }}"
-                data-critical="{{ $stats['critical'] }}"
-                data-expired="{{ $stats['expired'] }}">
-                {{ $baseType }} <span class="fleet-tab-count">{{ $stats['count'] }}</span>
-            </button>
-            @endforeach
+            <!-- Fleet Multi-Select Dropdown -->
+            <div class="fleet-dropdown" style="position: relative;">
+                <button type="button" id="fleetDropdownBtn" class="btn btn-secondary"
+                    style="padding: 0.5rem 1rem; display: flex; align-items: center; gap: 8px;">
+                    <span>✈️ Filter Fleet</span>
+                    <span style="font-size: 0.7em;">▼</span>
+                </button>
+                <div id="fleetDropdownMenu" class="fleet-dropdown-menu">
+                    <!-- Select All Option -->
+                    <label class="fleet-checkbox-item all-fleets" style="border-bottom: 1px solid var(--border); margin-bottom: 4px; padding-bottom: 8px;">
+                        <input type="checkbox" id="fleetCheckAll" class="fleet-checkbox-all" checked>
+                        <span class="fleet-name">All Fleets</span>
+                    </label>
+
+                    @foreach($perFleetStats as $baseType => $stats)
+                        <label class="fleet-checkbox-item">
+                            <input type="checkbox" class="fleet-checkbox" checked
+                                data-fleet="{{ $baseType }}"
+                                data-safe="{{ $stats['safe'] }}"
+                                data-warning="{{ $stats['warning'] }}"
+                                data-critical="{{ $stats['critical'] }}"
+                                data-expired="{{ $stats['expired'] }}">
+                            <span class="fleet-name">{{ $baseType }}</span>
+                            <span class="fleet-count">{{ $stats['count'] }}</span>
+                        </label>
+                    @endforeach
+                </div>
+            </div>
         </div>
 
         <div class="summary-cards">
             <div class="summary-card safe">
                 <div class="summary-icon">🟢</div>
-                <div class="summary-value" id="overviewSafe">{{ $totalStats['safe'] }}</div>
+                <div class="summary-value" id="overviewSafe" data-initial="{{ $totalStats['safe'] }}">
+                    {{ $totalStats['safe'] }}
+                </div>
                 <div class="summary-label">Safe</div>
                 <div class="summary-desc">> 6 months</div>
             </div>
             <div class="summary-card warning">
                 <div class="summary-icon">🟡</div>
-                <div class="summary-value" id="overviewWarning">{{ $totalStats['warning'] }}</div>
+                <div class="summary-value" id="overviewWarning" data-initial="{{ $totalStats['warning'] }}">
+                    {{ $totalStats['warning'] }}
+                </div>
                 <div class="summary-label">Warning</div>
                 <div class="summary-desc">3-6 months</div>
             </div>
             <div class="summary-card critical">
                 <div class="summary-icon">🔴</div>
-                <div class="summary-value" id="overviewCritical">{{ $totalStats['critical'] }}</div>
+                <div class="summary-value" id="overviewCritical" data-initial="{{ $totalStats['critical'] }}">
+                    {{ $totalStats['critical'] }}
+                </div>
                 <div class="summary-label">Critical</div>
                 <div class="summary-desc">
                     < 3 months</div>
                 </div>
                 <div class="summary-card expired">
                     <div class="summary-icon">🟣</div>
-                    <div class="summary-value" id="overviewExpired">{{ $totalStats['expired'] }}</div>
+                    <div class="summary-value" id="overviewExpired" data-initial="{{ $totalStats['expired'] }}">
+                        {{ $totalStats['expired'] }}
+                    </div>
                     <div class="summary-label">Expired</div>
                     <div class="summary-desc">Past due</div>
                 </div>
@@ -263,29 +282,94 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Fleet Overview Tab Switching
-            const fleetTabs = document.querySelectorAll('.fleet-tab');
+
+            // Fleet Overview Multi-Select Logic
+            const fleetCheckboxes = document.querySelectorAll('.fleet-checkbox');
+            const checkAllBox = document.getElementById('fleetCheckAll');
             const overviewSafe = document.getElementById('overviewSafe');
             const overviewWarning = document.getElementById('overviewWarning');
             const overviewCritical = document.getElementById('overviewCritical');
             const overviewExpired = document.getElementById('overviewExpired');
 
-            fleetTabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    fleetTabs.forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
+            // Initial totals (all checked by default or none checked = all)
+            const initialStats = {
+                safe: parseInt(overviewSafe.dataset.initial),
+                warning: parseInt(overviewWarning.dataset.initial),
+                critical: parseInt(overviewCritical.dataset.initial),
+                expired: parseInt(overviewExpired.dataset.initial)
+            };
 
-                    overviewSafe.textContent = this.dataset.safe;
-                    overviewWarning.textContent = this.dataset.warning;
-                    overviewCritical.textContent = this.dataset.critical;
-                    overviewExpired.textContent = this.dataset.expired;
+            function updateOverview() {
+                let totalSafe = 0, totalWarning = 0, totalCritical = 0, totalExpired = 0;
+                let checkedCount = 0;
 
-                    // Animate values
-                    [overviewSafe, overviewWarning, overviewCritical, overviewExpired].forEach(el => {
-                        el.style.transform = 'scale(1.15)';
-                        setTimeout(() => el.style.transform = 'scale(1)', 200);
-                    });
+                fleetCheckboxes.forEach(cb => {
+                    if (cb.checked) {
+                        checkedCount++;
+                        totalSafe += parseInt(cb.dataset.safe);
+                        totalWarning += parseInt(cb.dataset.warning);
+                        totalCritical += parseInt(cb.dataset.critical);
+                        totalExpired += parseInt(cb.dataset.expired);
+                    }
                 });
+
+                // If nothing checked, show ALL (or show 0? Usually "All" is better UX, but let's stick to selection)
+                // Let's make it: if nothing checked -> Show 0 (or revert to All? Let's revert to All for better UX)
+                if (!checkedCount) { // Changed from !anyChecked to !checkedCount
+                    totalSafe = initialStats.safe;
+                    totalWarning = initialStats.warning;
+                    totalCritical = initialStats.critical;
+                    totalExpired = initialStats.expired;
+                }
+
+                // Update "Check All" state
+                if (checkAllBox) {
+                    checkAllBox.checked = (checkedCount === fleetCheckboxes.length);
+                    checkAllBox.indeterminate = (checkedCount > 0 && checkedCount < fleetCheckboxes.length);
+                }
+
+                overviewSafe.textContent = totalSafe;
+                overviewWarning.textContent = totalWarning;
+                overviewCritical.textContent = totalCritical;
+                overviewExpired.textContent = totalExpired;
+
+                // Simple animation
+                [overviewSafe, overviewWarning, overviewCritical, overviewExpired].forEach(el => {
+                    el.style.transform = 'scale(1.15)';
+                    setTimeout(() => el.style.transform = 'scale(1)', 200);
+                });
+            }
+
+            // "Check All" Event Listener
+            checkAllBox?.addEventListener('change', function () {
+                const isChecked = this.checked;
+                fleetCheckboxes.forEach(cb => {
+                    cb.checked = isChecked;
+                });
+                updateOverview();
+            });
+
+            // Individual Checkbox Listener
+            fleetCheckboxes.forEach(cb => {
+                cb.addEventListener('change', updateOverview);
+            });
+
+            // Initial update to set correct state for "Check All" and overview totals
+            updateOverview();
+
+            // Toggle Dropdown
+            const dropdownBtn = document.getElementById('fleetDropdownBtn');
+            const dropdownMenu = document.getElementById('fleetDropdownMenu');
+
+            dropdownBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                dropdownMenu.classList.toggle('show');
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!dropdownBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                    dropdownMenu.classList.remove('show');
+                }
             });
             const toggleBtn = document.getElementById('toggleFilters');
             const filterPanel = document.getElementById('filterPanel');
