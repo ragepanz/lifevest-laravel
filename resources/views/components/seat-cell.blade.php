@@ -3,7 +3,7 @@
     $hasSeat = in_array($col, $rowCols);
     $seat = $seats[$seatId] ?? null;
     $status = $seat?->status ?? 'no-data';
-    $dateFormat = isset($isPdfExport) && $isPdfExport ? 'd/m/Y' : 'j M Y';
+    $dateFormat = isset($isPdfExport) && $isPdfExport ? 'd M Y' : 'j M Y';
     $expiryDate = $seat?->expiry_date?->format($dateFormat) ?? '-';
 @endphp
 

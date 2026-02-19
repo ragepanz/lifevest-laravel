@@ -1,4 +1,4 @@
-@php $dateFormat = isset($isPdfExport) && $isPdfExport ? 'd/m/Y' : 'j M Y'; @endphp
+@php $dateFormat = isset($isPdfExport) && $isPdfExport ? 'd M Y' : 'j M Y'; @endphp
 <!-- Cockpit Section --><x-cockpit-section :seats="$seats" :isPdfExport="$isPdfExport ?? false" />
 
 <!-- Attendant FWD (Forward - 1 seat left) -->

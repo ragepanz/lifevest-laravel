@@ -8,7 +8,7 @@
             @php
                 $seat = $seats[$seatId] ?? null;
                 $status = $seat?->status ?? 'no-data';
-                $dateFormat = isset($isPdfExport) && $isPdfExport ? 'd/m/Y' : 'j M Y';
+                $dateFormat = isset($isPdfExport) && $isPdfExport ? 'd M Y' : 'j M Y';
                 $expiryDate = $seat?->expiry_date?->format($dateFormat) ?? 'Click to set';
             @endphp
             <div class="seat-card cockpit-seat status-{{ $status }}" data-seat="{{ $seatId }}">

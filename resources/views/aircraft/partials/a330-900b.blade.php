@@ -1,4 +1,4 @@
-@php $dateFormat = isset($isPdfExport) && $isPdfExport ? 'd/m/Y' : 'j M Y'; @endphp
+@php $dateFormat = isset($isPdfExport) && $isPdfExport ? 'd M Y' : 'j M Y'; @endphp
 <!-- Cockpit Section --><x-cockpit-section :seats="$seats" :isPdfExport="$isPdfExport ?? false" />
 
 <!-- Economy Premium - Rows 21-27 (2-3-2 layout: A C - D F G - H K) -->
