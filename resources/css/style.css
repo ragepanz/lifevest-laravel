@@ -558,6 +558,18 @@ body {
     background: #5a6270;
 }
 
+.btn-batch-input {
+    background: #e67e22;
+    color: white;
+    text-decoration: none;
+    font-size: 0.85rem;
+    padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+.btn-batch-input:hover {
+    background: #d35400;
+}
+
 /* Buttons */
 .btn {
     display: inline-flex;

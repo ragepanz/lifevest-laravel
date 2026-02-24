@@ -178,36 +178,78 @@
             display: inline-block;
         }
 
-        /* Spare Section */
+        /* Hide original spare section from partial (we render our own) */
         .spare-grid {
-            page-break-inside: avoid;
-            /* Only break if it doesn't fit */
-            width: 100%;
-            margin-top: 20px;
+            display: none !important;
         }
 
-        .spare-column {
-            display: block;
-            /* Stack vertically */
-            vertical-align: top;
-            width: 80%;
-            /* Wider box */
-            border: 2px dashed #333;
-            padding: 20px;
-            /* More padding */
-            margin: 30px auto;
-            /* Center and add space */
-        }
-
-        .spare-items {
-            min-height: 150px;
-            /* Taller box */
-        }
-
+        .spare-grid+button,
         .empty-message {
-            font-style: italic;
-            color: #999;
-            font-size: 9pt;
+            display: none !important;
+        }
+
+        /* Hide the partial's Spare header (last cabin-section) */
+        .cabin-section:last-of-type {
+            display: none !important;
+        }
+
+        /* Custom Blank Form Spare Boxes */
+        .blank-spare-section {
+            margin-top: 25px;
+            text-align: center;
+            page-break-before: auto;
+        }
+
+        .blank-spare-section h2 {
+            font-size: 12pt;
+            margin-bottom: 12px;
+        }
+
+        .blank-spare-grid {
+            width: 85%;
+            margin: 15px auto;
+            border: 2px dashed #555;
+            padding: 15px 10px;
+            text-align: left;
+            page-break-inside: avoid;
+        }
+
+        .blank-spare-grid h3 {
+            font-size: 11pt;
+            margin: 0 0 10px 0;
+            background-color: #e0e0e0;
+            padding: 4px 12px;
+            border-radius: 4px;
+            display: block;
+            text-align: center;
+        }
+
+        .blank-spare-box {
+            width: 55px;
+            height: 42px;
+            border: 1.5px solid #555;
+            background: #fff;
+            display: inline-block;
+            margin: 3px 2px;
+            text-align: center;
+            vertical-align: top;
+            padding: 2px;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+
+        .blank-spare-box .box-num {
+            font-size: 8px;
+            font-weight: bold;
+            color: #555;
+            border-bottom: 1px dotted #bbb;
+            padding-bottom: 1px;
+            margin-bottom: 1px;
+        }
+
+        .blank-spare-box .box-date {
+            min-height: 18px;
+            /* Space for handwriting */
         }
 
         /* Hide interactive elements */
@@ -287,6 +329,30 @@
                 Layout '{{ $aircraft->layout }}' not found.
             </div>
         @endif
+
+        <!-- Blank Form: Numbered Spare Boxes -->
+        <section class="blank-spare-section">
+
+            <div class="blank-spare-grid">
+                <h3>PAX</h3>
+                @for($i = 1; $i <= $maxPax; $i++)
+                    <div class="blank-spare-box">
+                        <div class="box-num">{{ $i }}</div>
+                        <div class="box-date"></div>
+                    </div>
+                @endfor
+            </div>
+
+            <div class="blank-spare-grid">
+                <h3>INF</h3>
+                @for($i = 1; $i <= $maxInf; $i++)
+                    <div class="blank-spare-box">
+                        <div class="box-num">{{ $i }}</div>
+                        <div class="box-date"></div>
+                    </div>
+                @endfor
+            </div>
+        </section>
     </div>
 
     <!-- Signature Box -->

@@ -26,5 +26,10 @@
                 Blank Form
             </a>
         @endif
+        @if($registration && Route::has('aircraft.batchInput'))
+            <a href="{{ route('aircraft.batchInput', $registration) }}" class="btn btn-batch-input">
+                ⚡ Batch Input
+            </a>
+        @endif
     </div>
 </div>

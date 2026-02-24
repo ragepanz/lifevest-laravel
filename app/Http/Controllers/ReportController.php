@@ -58,12 +58,36 @@ class ReportController extends Controller
         // Pass empty seats collection - the view will show blank boxes
         $seats = collect();
 
+        // Determine buffer counts based on aircraft type
+        $type = strtoupper($aircraft->type);
+        $maxPax = 12;
+        $maxInf = 20;
+
+        if (str_contains($type, 'A320')) {
+            $maxPax = 15;
+            $maxInf = 20;
+        } elseif (str_contains($type, 'A330')) {
+            $maxPax = 15;
+            $maxInf = 40;
+        } elseif (str_contains($type, 'ATR')) {
+            $maxPax = 10;
+            $maxInf = 10;
+        } elseif (str_contains($type, '737')) {
+            $maxPax = 10;
+            $maxInf = 25;
+        } elseif (str_contains($type, '777')) {
+            $maxPax = 35;
+            $maxInf = 40;
+        }
+
         // Render PDF with blank form template
         $pdf = Pdf::loadView('reports.blank-form', [
             'aircraft' => $aircraft,
             'registration' => $registration,
             'seats' => $seats,
             'isBlankForm' => true,
+            'maxPax' => $maxPax,
+            'maxInf' => $maxInf,
         ]);
 
         // Setup paper
