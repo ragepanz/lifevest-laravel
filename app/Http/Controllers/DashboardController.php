@@ -145,7 +145,13 @@ class DashboardController extends Controller
                 $pn = $info['pn'];
                 $catSeats = $acSeats->filter(fn($s) => in_array($s->class_type, $info['types']));
                 $total = $catSeats->count();
+
+                $sixMonths = $today->copy()->addMonths(6);
+                $threeMonths = $today->copy()->addMonths(3);
+
                 $expired = $catSeats->filter(fn($s) => $s->expiry_date && \Carbon\Carbon::parse($s->expiry_date)->lt($today))->count();
+                $critical = $catSeats->filter(fn($s) => $s->expiry_date && \Carbon\Carbon::parse($s->expiry_date)->gte($today) && \Carbon\Carbon::parse($s->expiry_date)->lt($threeMonths))->count();
+                $warning = $catSeats->filter(fn($s) => $s->expiry_date && \Carbon\Carbon::parse($s->expiry_date)->gte($threeMonths) && \Carbon\Carbon::parse($s->expiry_date)->lt($sixMonths))->count();
 
                 $key = $pn . '|' . $category;
                 if (!isset($pnSummary[$key])) {
@@ -154,21 +160,32 @@ class DashboardController extends Controller
                         'category' => $category,
                         'total' => 0,
                         'expired' => 0,
+                        'critical' => 0,
+                        'warning' => 0,
                         'aircraft' => [],
                     ];
                 }
                 $pnSummary[$key]['total'] += $total;
                 $pnSummary[$key]['expired'] += $expired;
-                if ($expired > 0) {
-                    $pnSummary[$key]['aircraft'][] = ['reg' => $reg, 'expired' => $expired];
+                $pnSummary[$key]['critical'] += $critical;
+                $pnSummary[$key]['warning'] += $warning;
+                if ($expired > 0 || $critical > 0 || $warning > 0) {
+                    $pnSummary[$key]['aircraft'][] = [
+                        'reg' => $reg,
+                        'expired' => $expired,
+                        'critical' => $critical,
+                        'warning' => $warning,
+                    ];
                 }
             }
         }
 
-        // Sort: expired first (descending), then alphabetically
+        // Sort: most attention-needed first, then alphabetically
         usort($pnSummary, function ($a, $b) {
-            if ($b['expired'] !== $a['expired'])
-                return $b['expired'] - $a['expired'];
+            $aAttention = $a['expired'] + $a['critical'] + $a['warning'];
+            $bAttention = $b['expired'] + $b['critical'] + $b['warning'];
+            if ($bAttention !== $aAttention)
+                return $bAttention - $aAttention;
             return strcmp($a['pn'], $b['pn']);
         });
 

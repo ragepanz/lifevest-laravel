@@ -2137,20 +2137,201 @@ vertical-align: middle;
     font-weight: 600;
 }
 
-.replacement-breakdown {
-    margin-top: 0.75rem;
-    padding-top: 0.65rem;
+/* Status Badges Row */
+.replacement-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.badge-expired {
+    font-size: 0.88rem;
+    color: #c4b5fd;
+    font-weight: 700;
+}
+
+.badge-critical {
+    font-size: 0.88rem;
+    color: #f87171;
+    font-weight: 700;
+}
+
+.badge-warning {
+    font-size: 0.88rem;
+    color: #fbbf24;
+    font-weight: 700;
+}
+
+/* Tab Filter Buttons */
+.replacement-tabs {
+    display: flex;
+    gap: 4px;
+    margin-top: 10px;
+    padding-top: 8px;
     border-top: 1px solid var(--border);
+}
+
+.tab-btn {
+    font-size: 0.8rem;
+    padding: 4px 12px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 600;
+}
+
+.tab-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.tab-btn.active {
+    color: #fff;
+    border-color: transparent;
+}
+
+.tab-btn[data-tab="expired"].active {
+    background: rgba(139, 92, 246, 0.3);
+    border-color: #8b5cf6;
+}
+
+.tab-btn[data-tab="critical"].active {
+    background: rgba(239, 68, 68, 0.3);
+    border-color: #ef4444;
+}
+
+.tab-btn[data-tab="warning"].active {
+    background: rgba(245, 158, 11, 0.3);
+    border-color: #f59e0b;
+}
+
+.tab-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+/* Breakdown */
+.replacement-breakdown {
+    margin-top: 0.5rem;
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
 }
 
 .breakdown-item {
-    font-size: 0.75rem;
-    background: rgba(248, 113, 113, 0.15);
-    color: #fca5a5;
-    padding: 2px 10px;
+    font-size: 0.82rem;
+    padding: 3px 12px;
     border-radius: 10px;
     font-weight: 600;
+}
+
+.breakdown-item.bd-expired {
+    background: rgba(139, 92, 246, 0.15);
+    color: #c4b5fd;
+}
+
+.breakdown-item.bd-critical {
+    background: rgba(248, 113, 113, 0.15);
+    color: #fca5a5;
+}
+
+.breakdown-item.bd-warning {
+    background: rgba(251, 191, 36, 0.15);
+    color: #fde68a;
+}
+
+/* Light Mode - Replacement Summary */
+[data-theme="light"] .badge-expired {
+    color: #6d28d9;
+}
+
+[data-theme="light"] .badge-critical {
+    color: #dc2626;
+}
+
+[data-theme="light"] .badge-warning {
+    color: #b45309;
+}
+
+[data-theme="light"] .tab-btn {
+    color: #475569;
+    border-color: #cbd5e1;
+}
+
+[data-theme="light"] .tab-btn[data-tab="expired"].active {
+    background: rgba(109, 40, 217, 0.15);
+    border-color: #7c3aed;
+    color: #6d28d9;
+}
+
+[data-theme="light"] .tab-btn[data-tab="critical"].active {
+    background: rgba(220, 38, 38, 0.15);
+    border-color: #ef4444;
+    color: #dc2626;
+}
+
+[data-theme="light"] .tab-btn[data-tab="warning"].active {
+    background: rgba(180, 83, 9, 0.15);
+    border-color: #f59e0b;
+    color: #b45309;
+}
+
+[data-theme="light"] .breakdown-item.bd-expired {
+    background: rgba(109, 40, 217, 0.12);
+    color: #5b21b6;
+}
+
+[data-theme="light"] .breakdown-item.bd-critical {
+    background: rgba(220, 38, 38, 0.12);
+    color: #b91c1c;
+}
+
+[data-theme="light"] .breakdown-item.bd-warning {
+    background: rgba(180, 83, 9, 0.12);
+    color: #92400e;
+}
+
+[data-theme="light"] .replacement-ok {
+    color: #15803d;
+}
+
+/* Jump to P/N Summary Button */
+html {
+    scroll-behavior: smooth;
+}
+
+#replacement-summary,
+#quick-stats {
+    scroll-margin-top: 80px;
+}
+
+.btn-jump-pn {
+    font-size: 0.8rem;
+    padding: 4px 14px;
+    border-radius: 20px;
+    background: rgba(14, 165, 233, 0.15);
+    color: #38bdf8;
+    text-decoration: none;
+    font-weight: 600;
+    border: 1px solid rgba(14, 165, 233, 0.3);
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.btn-jump-pn:hover {
+    background: rgba(14, 165, 233, 0.3);
+    transform: translateY(1px);
+}
+
+[data-theme="light"] .btn-jump-pn {
+    background: rgba(14, 165, 233, 0.1);
+    color: #0284c7;
+    border-color: rgba(14, 165, 233, 0.3);
+}
+
+[data-theme="light"] .btn-jump-pn:hover {
+    background: rgba(14, 165, 233, 0.2);
 }
