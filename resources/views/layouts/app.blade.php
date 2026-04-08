@@ -78,6 +78,9 @@
         <span class="toast-message">Success!</span>
     </div>
 
+    <!-- SheetJS for Excel Export -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+
     @stack('scripts')
     
     <script>

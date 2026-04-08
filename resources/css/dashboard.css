@@ -396,6 +396,428 @@
     margin-top: auto;
 }
 
+/* ============================================
+   Monthly Replacement Plan Section
+   ============================================ */
+
+.monthly-plan-section {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    border: 1px solid var(--border);
+}
+
+.monthly-plan-subtitle {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 400;
+}
+
+/* Grand Summary Bar */
+.monthly-grand-summary {
+    display: flex;
+    gap: 1rem;
+    margin: 1rem 0 1.5rem;
+    flex-wrap: wrap;
+}
+
+.monthly-grand-item {
+    background: var(--background);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1.25rem;
+    text-align: center;
+    flex: 1;
+    min-width: 120px;
+    border: 1px solid var(--border);
+    transition: all var(--transition-fast);
+}
+
+.monthly-grand-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.monthly-grand-item.overdue {
+    border-color: var(--expired);
+    background: linear-gradient(135deg, rgba(156, 39, 176, 0.1), transparent);
+}
+
+.monthly-grand-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1;
+}
+
+.monthly-grand-item.overdue .monthly-grand-value {
+    color: var(--expired);
+}
+
+.monthly-grand-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-top: 0.25rem;
+    display: block;
+}
+
+/* Monthly Timeline */
+.monthly-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+/* Monthly Card */
+.monthly-card {
+    background: var(--background);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    transition: all var(--transition-normal);
+}
+
+.monthly-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.monthly-card.expanded {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Urgency border-left coloring (matches dashboard: overdue=purple, critical=red, warning=yellow) */
+.monthly-card.overdue {
+    border-left: 4px solid var(--expired);
+}
+
+.monthly-card.critical {
+    border-left: 4px solid var(--danger);
+}
+
+.monthly-card.warning {
+    border-left: 4px solid var(--warning);
+}
+
+/* Card Header */
+.monthly-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    transition: background var(--transition-fast);
+    user-select: none;
+}
+
+.monthly-card-header:hover {
+    background: var(--surface);
+}
+
+.monthly-card-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+/* Urgency Dot */
+.monthly-urgency-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.monthly-urgency-dot.overdue {
+    background: var(--expired);
+    box-shadow: 0 0 8px rgba(156, 39, 176, 0.5);
+    animation: pulse-dot 2s infinite;
+}
+
+.monthly-urgency-dot.critical {
+    background: var(--danger);
+    box-shadow: 0 0 8px rgba(244, 67, 54, 0.5);
+    animation: pulse-dot 2s infinite;
+}
+
+.monthly-urgency-dot.warning {
+    background: var(--warning);
+    box-shadow: 0 0 6px rgba(255, 193, 7, 0.4);
+}
+
+@keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.2); }
+}
+
+/* Card Title */
+.monthly-card-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.monthly-card-meta {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 0.15rem;
+}
+
+/* Monthly Badge */
+.monthly-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.monthly-badge.overdue {
+    background: var(--expired);
+    color: #fff;
+}
+
+.monthly-badge.critical {
+    background: var(--danger);
+    color: #fff;
+}
+
+.monthly-badge.warning {
+    background: var(--warning);
+    color: #111;
+}
+
+.monthly-badge.current-month {
+    background: rgba(33, 150, 243, 0.8);
+    color: #fff;
+}
+
+/* Card Right (total) */
+.monthly-card-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.monthly-card-total {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.monthly-card.overdue .monthly-card-total { color: var(--expired); }
+.monthly-card.critical .monthly-card-total { color: var(--danger); }
+.monthly-card.warning .monthly-card-total { color: var(--warning); }
+
+.monthly-card-unit {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.monthly-card-arrow {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    transition: transform 0.2s ease;
+    margin-left: 0.5rem;
+}
+
+/* Export Excel Button */
+.btn-export-month {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.3rem 0.65rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #4caf50;
+    background: rgba(76, 175, 80, 0.1);
+    border: 1px solid rgba(76, 175, 80, 0.3);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    white-space: nowrap;
+}
+
+.btn-export-month:hover {
+    background: rgba(76, 175, 80, 0.2);
+    border-color: rgba(76, 175, 80, 0.6);
+    color: #66bb6a;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.2);
+}
+
+.btn-export-month:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* Card Body (collapsible detail) */
+.monthly-card-body {
+    padding: 0rem 1.25rem 1.25rem;
+    border-top: 1px solid var(--border);
+    animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; max-height: 0; }
+    to { opacity: 1; max-height: 1000px; }
+}
+
+/* P/N Breakdown Row */
+.monthly-pn-row {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.monthly-pn-row:last-of-type {
+    border-bottom: none;
+}
+
+.monthly-pn-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.monthly-pn-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.monthly-pn-name {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+}
+
+.monthly-pn-category {
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 0.15rem 0.4rem;
+    border-radius: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.monthly-pn-category.adult {
+    background: rgba(33, 150, 243, 0.15);
+    color: #42a5f5;
+}
+
+.monthly-pn-category.crew {
+    background: rgba(255, 152, 0, 0.15);
+    color: #ffa726;
+}
+
+.monthly-pn-category.infant {
+    background: rgba(233, 30, 99, 0.15);
+    color: #ec407a;
+}
+
+.monthly-pn-category.unknown {
+    background: rgba(158, 158, 158, 0.15);
+    color: #9e9e9e;
+}
+
+.monthly-pn-count {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* Aircraft chips in P/N breakdown */
+.monthly-aircraft-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.monthly-aircraft-chip {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    text-decoration: none;
+    transition: all var(--transition-fast);
+}
+
+.monthly-aircraft-chip:hover {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+    transform: translateY(-1px);
+}
+
+/* Aircraft Summary at bottom of card */
+.monthly-aircraft-summary {
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px dashed var(--border);
+}
+
+.monthly-aircraft-summary-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.monthly-aircraft-summary-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.monthly-ac-summary-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.6rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all var(--transition-fast);
+}
+
+.monthly-ac-summary-chip:hover {
+    border-color: var(--primary);
+    background: rgba(33, 150, 243, 0.08);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.monthly-ac-reg {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.monthly-ac-type {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+}
+
+.monthly-ac-count {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    background: var(--background);
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    min-width: 20px;
+    text-align: center;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .dashboard-content {
@@ -416,5 +838,21 @@
 
     .fleet-card-stats {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .monthly-grand-summary {
+        flex-direction: column;
+    }
+
+    .monthly-card-header {
+        padding: 0.75rem 1rem;
+    }
+
+    .monthly-card-total {
+        font-size: 1.2rem;
+    }
+
+    .monthly-plan-subtitle {
+        display: none;
     }
 }

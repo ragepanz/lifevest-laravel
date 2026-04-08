@@ -131,7 +131,7 @@ class DashboardController extends Controller
         foreach ($aircrafts as $aircraft) {
             $reg = $aircraft->registration;
             $pnMap = [
-                'adult' => ['pn' => $aircraft->pn_adult, 'types' => ['business', 'economy', 'spare-pax']],
+                'adult' => ['pn' => $aircraft->pn_adult, 'types' => ['business', 'economy', 'first', 'spare-pax']],
                 'crew' => ['pn' => $aircraft->pn_crew, 'types' => ['cockpit', 'attendant']],
                 'infant' => ['pn' => $aircraft->pn_infant, 'types' => ['spare-inf']],
             ];
@@ -189,6 +189,128 @@ class DashboardController extends Controller
             return strcmp($a['pn'], $b['pn']);
         });
 
+        // ============================================================
+        // Build Monthly Replacement Plan
+        // Groups all seats by expiry month with P/N + aircraft breakdown
+        // ============================================================
+        $monthlyPlan = [];
+        $sixMonthsAhead = $today->copy()->addMonths(6)->endOfMonth();
+
+        foreach ($aircrafts as $aircraft) {
+            $reg = $aircraft->registration;
+            $acType = $aircraft->type;
+            $pnMap = [
+                'adult' => ['pn' => $aircraft->pn_adult, 'types' => ['business', 'economy', 'first', 'spare-pax']],
+                'crew' => ['pn' => $aircraft->pn_crew, 'types' => ['cockpit', 'attendant']],
+                'infant' => ['pn' => $aircraft->pn_infant, 'types' => ['spare-inf']],
+            ];
+
+            $acSeats = Seat::where('registration', $reg)->whereNotNull('expiry_date')->get();
+
+            foreach ($acSeats as $seat) {
+                $expiryDate = \Carbon\Carbon::parse($seat->expiry_date);
+
+                // Only include seats expiring within 6 months ahead (and overdue)
+                if ($expiryDate->gt($sixMonthsAhead)) {
+                    continue;
+                }
+
+                // Determine month key
+                if ($expiryDate->lt($today)) {
+                    $monthKey = 'overdue';
+                    $monthLabel = 'Overdue';
+                    $monthSort = '0000-00'; // Sort first
+                } else {
+                    $monthKey = $expiryDate->format('Y-m');
+                    $monthLabel = $expiryDate->format('F Y');
+                    $monthSort = $monthKey;
+                }
+
+                // Determine which P/N category this seat belongs to
+                $seatPn = null;
+                $seatCategory = null;
+                foreach ($pnMap as $category => $info) {
+                    if (in_array($seat->class_type, $info['types'])) {
+                        $seatPn = $info['pn'];
+                        $seatCategory = $category;
+                        break;
+                    }
+                }
+                // Skip if no PN (means no life vest for this category) or unknown class_type
+                if (!$seatPn || !$seatCategory) {
+                    continue;
+                }
+
+                // Initialize month bucket
+                if (!isset($monthlyPlan[$monthKey])) {
+                    $monthlyPlan[$monthKey] = [
+                        'key' => $monthKey,
+                        'label' => $monthLabel,
+                        'sort' => $monthSort,
+                        'total' => 0,
+                        'pn_breakdown' => [],
+                        'aircraft_breakdown' => [],
+                    ];
+                }
+
+                $monthlyPlan[$monthKey]['total']++;
+
+                // P/N breakdown
+                $pnKey = $seatPn . '|' . $seatCategory;
+                if (!isset($monthlyPlan[$monthKey]['pn_breakdown'][$pnKey])) {
+                    $monthlyPlan[$monthKey]['pn_breakdown'][$pnKey] = [
+                        'pn' => $seatPn,
+                        'category' => $seatCategory,
+                        'count' => 0,
+                        'aircraft' => [],
+                    ];
+                }
+                $monthlyPlan[$monthKey]['pn_breakdown'][$pnKey]['count']++;
+
+                // Aircraft breakdown within P/N
+                if (!isset($monthlyPlan[$monthKey]['pn_breakdown'][$pnKey]['aircraft'][$reg])) {
+                    $monthlyPlan[$monthKey]['pn_breakdown'][$pnKey]['aircraft'][$reg] = 0;
+                }
+                $monthlyPlan[$monthKey]['pn_breakdown'][$pnKey]['aircraft'][$reg]++;
+
+                // Aircraft total breakdown
+                if (!isset($monthlyPlan[$monthKey]['aircraft_breakdown'][$reg])) {
+                    $monthlyPlan[$monthKey]['aircraft_breakdown'][$reg] = [
+                        'type' => $acType,
+                        'count' => 0,
+                    ];
+                }
+                $monthlyPlan[$monthKey]['aircraft_breakdown'][$reg]['count']++;
+            }
+        }
+
+        // Sort by month (overdue first, then chronological)
+        uasort($monthlyPlan, function ($a, $b) {
+            return strcmp($a['sort'], $b['sort']);
+        });
+
+        // Determine urgency level for each month
+        // Match dashboard color scheme: overdue=purple, critical(<3mo)=red, warning(3-6mo)=yellow
+        $currentMonth = $today->format('Y-m');
+        $threeMonthsBoundary = $today->copy()->addMonths(3);
+        $sixMonthsBoundary = $today->copy()->addMonths(6);
+
+        foreach ($monthlyPlan as $key => &$month) {
+            $month['isCurrentMonth'] = ($key === $currentMonth);
+
+            if ($key === 'overdue') {
+                $month['urgency'] = 'overdue'; // 🟣 Expired - purple
+            } else {
+                $monthStart = \Carbon\Carbon::createFromFormat('Y-m', $key)->startOfMonth();
+                if ($monthStart->lt($threeMonthsBoundary)) {
+                    $month['urgency'] = 'critical'; // 🔴 < 3 months - red
+                } else {
+                    $month['urgency'] = 'warning'; // 🟡 3-6 months - yellow
+                }
+            }
+        }
+        unset($month);
+
         return view('dashboard', [
             'fleet' => $fleet,
             'fleetByAirline' => $fleetByAirline,
@@ -196,6 +318,7 @@ class DashboardController extends Controller
             'perFleetStats' => $perFleetStats,
             'lastUpdate' => $lastUpdate ? \Carbon\Carbon::parse($lastUpdate) : null,
             'pnSummary' => $pnSummary,
+            'monthlyPlan' => $monthlyPlan,
         ]);
     }
 }

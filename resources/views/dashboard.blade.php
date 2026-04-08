@@ -60,6 +60,9 @@
                 @if(count($pnSummary) > 0)
                     <a href="#replacement-summary" class="btn-jump-pn" title="Jump to Replacement Summary">🔄 P/N Summary ↓</a>
                 @endif
+                @if(count($monthlyPlan) > 0)
+                    <a href="#monthly-plan" class="btn-jump-pn" title="Jump to Monthly Plan">📅 Monthly Plan ↓</a>
+                @endif
                 <a href="#quick-stats" class="btn-jump-pn" title="Jump to Quick Stats">📊 Quick Stats ↓</a>
             </div>
 
@@ -293,6 +296,124 @@
                     </div>
                 @endforeach
             </div>
+        </section>
+    @endif
+
+    <!-- Monthly Replacement Plan -->
+    @if(count($monthlyPlan) > 0)
+        <section class="monthly-plan-section" id="monthly-plan">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <h2>📅 Monthly Replacement Plan</h2>
+                    <span class="monthly-plan-subtitle">Timeline kebutuhan penggantian life vest per bulan</span>
+                </div>
+                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <button type="button" id="toggleAllMonths" class="btn btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">Expand All</button>
+                    <a href="#top" class="btn-jump-pn">⬆ Back to Top</a>
+                </div>
+            </div>
+
+            {{-- Grand Total Summary --}}
+            @php
+                $grandTotal = collect($monthlyPlan)->sum('total');
+                $overdueTotal = isset($monthlyPlan['overdue']) ? $monthlyPlan['overdue']['total'] : 0;
+            @endphp
+            <div class="monthly-grand-summary">
+                <div class="monthly-grand-item">
+                    <span class="monthly-grand-value">{{ $grandTotal }}</span>
+                    <span class="monthly-grand-label">Total Life Vests</span>
+                </div>
+                <div class="monthly-grand-item overdue">
+                    <span class="monthly-grand-value">{{ $overdueTotal }}</span>
+                    <span class="monthly-grand-label">Overdue</span>
+                </div>
+                <div class="monthly-grand-item">
+                    <span class="monthly-grand-value">{{ count($monthlyPlan) - (isset($monthlyPlan['overdue']) ? 1 : 0) }}</span>
+                    <span class="monthly-grand-label">Months Ahead</span>
+                </div>
+            </div>
+
+            {{-- Monthly Timeline --}}
+            <div class="monthly-timeline">
+                @foreach($monthlyPlan as $monthKey => $month)
+                    <div class="monthly-card {{ $month['urgency'] }}" data-month="{{ $monthKey }}">
+                        {{-- Month Header (clickable) --}}
+                        <div class="monthly-card-header" onclick="toggleMonth('{{ $monthKey }}')">
+                            <div class="monthly-card-left">
+                                <span class="monthly-urgency-dot {{ $month['urgency'] }}"></span>
+                                <div>
+                                    <div class="monthly-card-title">
+                                        {{ $month['label'] }}
+                                        @if($month['urgency'] === 'overdue')
+                                            <span class="monthly-badge overdue">OVERDUE</span>
+                                        @elseif($month['urgency'] === 'critical')
+                                            <span class="monthly-badge critical">CRITICAL</span>
+                                        @elseif($month['urgency'] === 'warning')
+                                            <span class="monthly-badge warning">WARNING</span>
+                                        @endif
+                                        @if($month['isCurrentMonth'] ?? false)
+                                            <span class="monthly-badge current-month">THIS MONTH</span>
+                                        @endif
+                                    </div>
+                                    <div class="monthly-card-meta">
+                                        {{ count($month['pn_breakdown']) }} Part Number(s) • {{ count($month['aircraft_breakdown']) }} Aircraft
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="monthly-card-right">
+                                <span class="monthly-card-total">{{ $month['total'] }}</span>
+                                <span class="monthly-card-unit">vests</span>
+                                <button type="button" class="btn-export-month" onclick="event.stopPropagation(); exportMonthlyExcel('{{ $monthKey }}')" title="Export to Excel">
+                                    Export to Excel
+                                </button>
+                                <span class="monthly-card-arrow" id="arrow-{{ $monthKey }}">▼</span>
+                            </div>
+                        </div>
+
+                        {{-- Month Detail (collapsible) --}}
+                        <div class="monthly-card-body" id="body-{{ $monthKey }}" style="display: none;">
+                            {{-- P/N Breakdown --}}
+                            @foreach($month['pn_breakdown'] as $pnKey => $pnData)
+                                <div class="monthly-pn-row">
+                                    <div class="monthly-pn-header">
+                                        <div class="monthly-pn-info">
+                                            <span class="monthly-pn-name">{{ $pnData['pn'] }}</span>
+                                            <span class="monthly-pn-category {{ $pnData['category'] }}">{{ strtoupper($pnData['category']) }}</span>
+                                        </div>
+                                        <span class="monthly-pn-count">× {{ $pnData['count'] }}</span>
+                                    </div>
+                                    <div class="monthly-aircraft-list">
+                                        @foreach($pnData['aircraft'] as $reg => $count)
+                                            <a href="{{ route('aircraft.show', $reg) }}" class="monthly-aircraft-chip" title="Open {{ $reg }}">
+                                                {{ $reg }}: {{ $count }}
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endforeach
+
+                            {{-- Aircraft Summary --}}
+                            <div class="monthly-aircraft-summary">
+                                <div class="monthly-aircraft-summary-title">Aircraft Summary:</div>
+                                <div class="monthly-aircraft-summary-list">
+                                    @foreach($month['aircraft_breakdown'] as $reg => $acData)
+                                        <a href="{{ route('aircraft.show', $reg) }}" class="monthly-ac-summary-chip">
+                                            <span class="monthly-ac-reg">{{ $reg }}</span>
+                                            <span class="monthly-ac-type">{{ $acData['type'] }}</span>
+                                            <span class="monthly-ac-count">{{ $acData['count'] }}</span>
+                                        </a>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+            {{-- Embed monthly plan data for Excel export --}}
+            <script>
+                window.monthlyPlanData = @json($monthlyPlan);
+            </script>
         </section>
     @endif
 
@@ -556,6 +677,144 @@
                     });
                 });
             });
+
+            // Monthly Plan - Toggle All
+            const toggleAllBtn = document.getElementById('toggleAllMonths');
+            if (toggleAllBtn) {
+                let allExpanded = false;
+                toggleAllBtn.addEventListener('click', function() {
+                    allExpanded = !allExpanded;
+                    document.querySelectorAll('.monthly-card-body').forEach(body => {
+                        body.style.display = allExpanded ? 'block' : 'none';
+                    });
+                    document.querySelectorAll('.monthly-card-arrow').forEach(arrow => {
+                        arrow.style.transform = allExpanded ? 'rotate(180deg)' : 'rotate(0deg)';
+                    });
+                    document.querySelectorAll('.monthly-card').forEach(card => {
+                        if (allExpanded) {
+                            card.classList.add('expanded');
+                        } else {
+                            card.classList.remove('expanded');
+                        }
+                    });
+                    this.textContent = allExpanded ? 'Collapse All' : 'Expand All';
+                });
+            }
+
+            // Auto-expand overdue and critical
+            document.querySelectorAll('.monthly-card.overdue, .monthly-card.critical').forEach(card => {
+                const monthKey = card.dataset.month;
+                const body = document.getElementById('body-' + monthKey);
+                const arrow = document.getElementById('arrow-' + monthKey);
+                if (body) {
+                    body.style.display = 'block';
+                    card.classList.add('expanded');
+                }
+                if (arrow) arrow.style.transform = 'rotate(180deg)';
+            });
         });
+
+        // Monthly Plan - Toggle individual month (must be global function for onclick)
+        function toggleMonth(monthKey) {
+            const body = document.getElementById('body-' + monthKey);
+            const arrow = document.getElementById('arrow-' + monthKey);
+            const card = document.querySelector(`.monthly-card[data-month="${monthKey}"]`);
+
+            if (body) {
+                const isHidden = body.style.display === 'none';
+                body.style.display = isHidden ? 'block' : 'none';
+                if (card) card.classList.toggle('expanded', isHidden);
+                if (arrow) arrow.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+            }
+        }
+
+        // Monthly Plan - Export to Excel
+        function exportMonthlyExcel(monthKey) {
+            if (typeof XLSX === 'undefined') {
+                alert('Library Excel belum termuat. Coba refresh halaman.');
+                return;
+            }
+
+            const data = window.monthlyPlanData;
+            if (!data || !data[monthKey]) {
+                alert('Data tidak ditemukan untuk bulan ini.');
+                return;
+            }
+
+            const month = data[monthKey];
+            const label = month.label;
+            const wb = XLSX.utils.book_new();
+
+            // === Sheet 1: Part Number Breakdown ===
+            const pnRows = [];
+            const pnBreakdown = month.pn_breakdown;
+
+            for (const pnKey in pnBreakdown) {
+                const pn = pnBreakdown[pnKey];
+                const aircraft = pn.aircraft;
+
+                for (const reg in aircraft) {
+                    pnRows.push({
+                        'Part Number': pn.pn,
+                        'Category': pn.category.toUpperCase(),
+                        'Aircraft': reg,
+                        'Qty': aircraft[reg],
+                    });
+                }
+            }
+
+            // Add total row
+            pnRows.push({});
+            pnRows.push({
+                'Part Number': 'TOTAL',
+                'Category': '',
+                'Aircraft': '',
+                'Qty': month.total,
+            });
+
+            const ws1 = XLSX.utils.json_to_sheet(pnRows);
+
+            // Set column widths
+            ws1['!cols'] = [
+                { wch: 20 },  // Part Number
+                { wch: 10 },  // Category
+                { wch: 12 },  // Aircraft
+                { wch: 6 },   // Qty
+            ];
+
+            XLSX.utils.book_append_sheet(wb, ws1, 'Part Number Breakdown');
+
+            // === Sheet 2: Aircraft Summary ===
+            const acRows = [];
+            const acBreakdown = month.aircraft_breakdown;
+
+            for (const reg in acBreakdown) {
+                acRows.push({
+                    'Registration': reg,
+                    'Aircraft Type': acBreakdown[reg].type,
+                    'Qty': acBreakdown[reg].count,
+                });
+            }
+
+            acRows.push({});
+            acRows.push({
+                'Registration': 'TOTAL',
+                'Aircraft Type': '',
+                'Qty': month.total,
+            });
+
+            const ws2 = XLSX.utils.json_to_sheet(acRows);
+            ws2['!cols'] = [
+                { wch: 14 },  // Registration
+                { wch: 16 },  // Aircraft Type
+                { wch: 6 },   // Qty
+            ];
+
+            XLSX.utils.book_append_sheet(wb, ws2, 'Aircraft Summary');
+
+            // Generate filename
+            const filename = `Life_Vest_Replacement_${label.replace(/\s+/g, '_')}.xlsx`;
+            XLSX.writeFile(wb, filename);
+        }
     </script>
 @endpush
