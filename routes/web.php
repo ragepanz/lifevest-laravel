@@ -73,6 +73,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/admin/pdf-scan', [PdfScanController::class, 'scan'])->name('admin.pdf-scan.process');
         Route::get('/admin/pdf-scan/clear', [PdfScanController::class, 'clearScan'])->name('admin.pdf-scan.clear');
         Route::post('/admin/pdf-scan/export', [PdfScanController::class, 'exportExcel'])->name('admin.pdf-scan.export');
+        Route::post('/admin/pdf-scan/save-to-db', [PdfScanController::class, 'saveToDb'])->name('admin.pdf-scan.save-to-db');
     });
 
     // ============================================

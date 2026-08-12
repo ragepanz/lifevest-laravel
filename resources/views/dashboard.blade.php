@@ -1727,9 +1727,7 @@
             sidebarLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
                     // Check if the link points to the dashboard
-                    const isDashboardLink = link.href.includes('view=') && (link.href.includes(
-                            '/dashboard') || link.href.includes('localhost') || link.href
-                        .includes('127.0.0.1'));
+                    const isDashboardLink = link.href.includes('view=') && link.pathname.includes('/dashboard');
                     if (isDashboardLink) {
                         try {
                             const url = new URL(link.href);

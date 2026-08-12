@@ -27,7 +27,7 @@ class OcrPreprocessService
     public function __construct()
     {
         $this->pythonPath = env('PYTHON_PATH', 'python');
-        $this->tesseractPath = env('TESSERACT_PATH', 'C:/Program Files/Tesseract-OCR/tesseract.exe');
+        $this->tesseractPath = env('TESSERACT_PATH', '/usr/bin/tesseract');
         $this->scriptPath = base_path('scripts/ocr_preprocess.py');
         $this->corrections = config('ocr_corrections', []);
     }

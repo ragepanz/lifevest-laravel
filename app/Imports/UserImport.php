@@ -25,7 +25,7 @@ class UserImport implements ToModel, WithHeadingRow
             return null;
         }
 
-        $password = $row['password'] ?? 'Gmf12345'; // default password if not provided
+        $password = !empty($row['password']) ? $row['password'] : \Illuminate\Support\Str::random(16);
 
         return User::updateOrCreate(
             [

@@ -5,11 +5,17 @@ namespace App\Http\Controllers;
 use App\Exports\PdfScanExport;
 use App\Http\Requests\ScanRequest;
 use App\Models\Aircraft;
+use App\Models\ActivityLog;
+use App\Models\Seat;
 use App\Services\PdfParserService;
 use App\Services\VerificationService;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -305,5 +311,169 @@ class PdfScanController extends Controller
             new PdfScanExport($exportData, $includeVerification),
             $filename
         );
+    }
+
+    public function saveToDb(Request $request)
+    {
+        $registration = strtoupper(trim($request->input('master_registration', '')));
+        if (empty($registration)) {
+            return redirect()->back()->with('error', 'Registrasi pesawat tidak boleh kosong.');
+        }
+
+        $aircraft = Aircraft::where('registration', $registration)
+            ->orWhere('registration', str_replace('-', '', $registration))
+            ->first();
+
+        if (!$aircraft) {
+            return redirect()->back()->with('error', "Pesawat dengan registrasi [{$registration}] tidak ditemukan di database. Silakan daftarkan pesawat terlebih dahulu di Fleet Manager.");
+        }
+
+        $seatsData = $request->input('data', []);
+        if (empty($seatsData)) {
+            return redirect()->back()->with('error', 'Tidak ada data kursi yang disimpan.');
+        }
+
+        $updatedSeatsCount = 0;
+        $seatIds = [];
+        $affectedPns = [];
+
+        // Parse class_rows config for the aircraft layout to dynamic class type determination
+        $classRows = [];
+        if ($aircraft->layout) {
+            $classRows = config("aircraft_class_rows.{$aircraft->layout}", []);
+        }
+
+        try {
+            DB::transaction(function () use ($seatsData, $aircraft, &$updatedSeatsCount, &$seatIds, &$affectedPns, $classRows) {
+                foreach ($seatsData as $item) {
+                    $seatId = strtoupper(trim($item['seat_id'] ?? ''));
+                    $expiryDateStr = trim($item['expiry_date'] ?? '');
+
+                    if (empty($seatId) || empty($expiryDateStr)) {
+                        continue;
+                    }
+
+                    // Parse expiry date
+                    $expiryDate = null;
+                    try {
+                        $dateValue = strtoupper(str_replace(['/', '.', ' '], '-', $expiryDateStr));
+                        if (preg_match('/^([A-Z]{3})-(\d{2,4})$/', $dateValue, $matches)) {
+                            $year = $matches[2];
+                            if (strlen($year) == 2) {
+                                $year = '20'.$year;
+                            }
+                            $expiryDate = Carbon::parse('01-'.$matches[1]."-$year");
+                        } else {
+                            $expiryDate = Carbon::parse($dateValue);
+                        }
+                    } catch (\Exception $e) {
+                        Log::warning("[PDF Scan saveToDb] Failed parsing date: {$expiryDateStr}");
+                        continue;
+                    }
+
+                    if (!$expiryDate) {
+                        continue;
+                    }
+
+                    // Map class type, row, col
+                    $classType = 'economy';
+                    $rowNum = null;
+                    $colNum = $seatId;
+                    $seatIdLower = strtolower($seatId);
+
+                    // Attendant
+                    if (str_contains($seatIdLower, 'att/') || str_starts_with($seatIdLower, 'd')) {
+                        $classType = 'attendant';
+                        $colNum = $seatIdLower;
+                    }
+                    // Cockpit
+                    elseif (in_array($seatIdLower, ['captain', 'pilot', 'copilot', 'observer1', 'observer2'])) {
+                        $classType = 'cockpit';
+                        $colNum = $seatIdLower;
+                    }
+                    // Spare
+                    elseif (preg_match('/^(pax|adult|inf|infant|spare)-?(\\d+)$/i', $seatId, $m)) {
+                        $rawType = strtolower($m[1]);
+                        $isInfant = in_array($rawType, ['inf', 'infant']);
+                        $classType = $isInfant ? 'spare-inf' : 'spare-pax';
+                        $colNum = $seatIdLower;
+                    }
+                    // Regular seat
+                    else {
+                        $cleanSeatId = preg_replace('/[^A-Z0-9]/', '', $seatId);
+                        if (preg_match('/^(\d+)([A-Z]+)$/', $cleanSeatId, $matches)) {
+                            $rowNum = (int) $matches[1];
+                            $colNum = $matches[2];
+                        }
+
+                        if ($rowNum && !empty($classRows)) {
+                            foreach ($classRows as $class => $rows) {
+                                if (in_array($rowNum, $rows)) {
+                                    $classType = $class;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    Seat::updateOrCreate(
+                        [
+                            'registration' => $aircraft->registration,
+                            'seat_id' => $seatId,
+                        ],
+                        [
+                            'row' => $rowNum,
+                            'col' => $colNum,
+                            'class_type' => $classType,
+                            'expiry_date' => $expiryDate->toDateString(),
+                        ]
+                    );
+
+                    $updatedSeatsCount++;
+                    $seatIds[] = $seatId;
+
+                    if (str_starts_with($seatIdLower, 'inf-') || str_contains($seatIdLower, 'infant')) {
+                        $affectedPns[] = $aircraft->pn_infant;
+                    } elseif (in_array($seatIdLower, ['captain', 'fo', 'pilot', 'copilot', 'obs-1', 'obs-2', 'observer1', 'observer2']) || str_starts_with($seatIdLower, 'att/')) {
+                        $affectedPns[] = $aircraft->pn_crew;
+                    } else {
+                        $affectedPns[] = $aircraft->pn_adult;
+                    }
+                }
+
+                if ($updatedSeatsCount > 0) {
+                    $uniquePns = array_values(array_unique(array_filter($affectedPns)));
+
+                    // Log the activity
+                    ActivityLog::create([
+                        'user_id' => Auth::id(),
+                        'registration' => $aircraft->registration,
+                        'action' => 'update',
+                        'details' => [
+                            'seat_count' => $updatedSeatsCount,
+                            'expiry_date' => 'Multiple (PDF Scan Direct Apply)',
+                            'pns' => $uniquePns,
+                            'seats' => array_slice($seatIds, 0, 50),
+                            'source' => 'PDF Scan Direct Apply',
+                        ],
+                    ]);
+                }
+            });
+
+            if ($updatedSeatsCount > 0) {
+                // Clear cache
+                Cache::flush();
+                session()->forget('pdf_scan_result');
+
+                return redirect()->route('aircraft.show', $aircraft->registration)
+                    ->with('success', "Berhasil menyimpan {$updatedSeatsCount} data tanggal garansi rompi langsung ke database!");
+            }
+
+            return redirect()->back()->with('error', 'Tidak ada data kursi valid yang berhasil disimpan.');
+
+        } catch (\Exception $e) {
+            Log::error('[PDF Scan saveToDb] Failed saving to database', ['error' => $e->getMessage()]);
+            return redirect()->back()->with('error', 'Terjadi kesalahan sistem saat menyimpan ke database: ' . $e->getMessage());
+        }
     }
 }

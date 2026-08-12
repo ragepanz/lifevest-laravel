@@ -11,6 +11,7 @@ use App\Models\Seat;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class AircraftController extends Controller
 {
@@ -243,9 +244,10 @@ class AircraftController extends Controller
                 'message' => count($seatIds).' seat(s) updated',
             ]);
         } catch (\Exception $e) {
+            Log::error('Error updating seats: ' . $e->getMessage(), ['exception' => $e]);
             return response()->json([
                 'success' => false,
-                'message' => 'Error: '.$e->getMessage(),
+                'message' => config('app.debug') ? 'Error: '.$e->getMessage() : 'An error occurred while updating the seats.',
             ], 500);
         }
     }
@@ -477,10 +479,10 @@ class AircraftController extends Controller
             'd-m-y',     // 01-03-30
             'd-M-y',     // 24-Jan-25
             'd-M-Y',     // 24-Jan-2025
-            'M-y',       // Oct-25
-            'M-Y',       // Oct-2025
-            'M/y',       // Oct/25
-            'M/Y',       // Oct/2025
+            '!M-y',      // Oct-25
+            '!M-Y',      // Oct-2025
+            '!M/y',      // Oct/25
+            '!M/Y',      // Oct/2025
         ];
 
         foreach ($formats as $format) {
@@ -488,7 +490,7 @@ class AircraftController extends Controller
                 $date = Carbon::createFromFormat($format, $dateStr);
                 if ($date) {
                     // For month-year only formats, set to first day
-                    if (in_array($format, ['M-y', 'M-Y', 'M/y', 'M/Y'])) {
+                    if (in_array($format, ['!M-y', '!M-Y', '!M/y', '!M/Y'])) {
                         $date->startOfMonth();
                     }
 

@@ -2,6 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Models\Aircraft;
+use App\Models\Airline;
+use App\Models\Seat;
 use App\Models\User;
 use App\Services\PdfParserService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -21,6 +24,10 @@ class PdfScanControllerTest extends TestCase
 
     private User $regularUser;
 
+    private Airline $airline;
+
+    private Aircraft $aircraft;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -28,6 +35,21 @@ class PdfScanControllerTest extends TestCase
         $this->superadmin = User::factory()->create(['role' => 'superadmin']);
         $this->admin = User::factory()->create(['role' => 'admin']);
         $this->regularUser = User::factory()->create(['role' => 'user']);
+
+        $this->airline = Airline::create([
+            'name' => 'Garuda Indonesia',
+            'code' => 'GA',
+        ]);
+        $this->aircraft = Aircraft::create([
+            'registration' => 'PK-GIA',
+            'airline_id' => $this->airline->id,
+            'type' => 'B777-300ER',
+            'layout' => 'b777-3class',
+            'status' => 'active',
+            'pn_adult' => '111-222',
+            'pn_crew' => '333-444',
+            'pn_infant' => '555-666',
+        ]);
 
         Storage::fake('temp_scans');
     }
@@ -189,5 +211,66 @@ class PdfScanControllerTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertHeader('content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    }
+
+    public function test_save_to_db_success()
+    {
+        $data = [
+            [
+                'seat_id' => '1A',
+                'expiry_date' => '2028-10-01',
+            ],
+            [
+                'seat_id' => 'att/d1-L',
+                'expiry_date' => 'OCT-28',
+            ],
+        ];
+
+        $response = $this->actingAs($this->admin)
+            ->post(route('admin.pdf-scan.save-to-db'), [
+                'master_registration' => 'PK-GIA',
+                'data' => $data,
+            ]);
+
+        $response->assertRedirect(route('aircraft.show', 'PK-GIA'));
+        $response->assertSessionHas('success');
+
+        $this->assertDatabaseHas('seats', [
+            'registration' => 'PK-GIA',
+            'seat_id' => '1A',
+            'expiry_date' => '2028-10-01 00:00:00',
+            'class_type' => 'first', // 1A is first class in b777-3class layout
+        ]);
+
+        $this->assertDatabaseHas('seats', [
+            'registration' => 'PK-GIA',
+            'seat_id' => 'ATT/D1-L',
+            'expiry_date' => '2028-10-01 00:00:00', // OCT-28 resolves to 2028-10-01
+            'class_type' => 'attendant',
+        ]);
+    }
+
+    public function test_save_to_db_validation_failures()
+    {
+        // 1. Missing registration
+        $response = $this->actingAs($this->admin)
+            ->from(route('admin.pdf-scan'))
+            ->post(route('admin.pdf-scan.save-to-db'), [
+                'master_registration' => '',
+                'data' => [],
+            ]);
+        $response->assertRedirect(route('admin.pdf-scan'));
+        $response->assertSessionHas('error', 'Registrasi pesawat tidak boleh kosong.');
+
+        // 2. Non-existent aircraft
+        $response = $this->actingAs($this->admin)
+            ->from(route('admin.pdf-scan'))
+            ->post(route('admin.pdf-scan.save-to-db'), [
+                'master_registration' => 'PK-NONEXISTENT',
+                'data' => [],
+            ]);
+        $response->assertRedirect(route('admin.pdf-scan'));
+        $response->assertSessionHas('error');
+        $this->assertStringContainsString('tidak ditemukan di database', session('error'));
     }
 }

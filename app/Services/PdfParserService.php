@@ -16,7 +16,7 @@ class PdfParserService
 
     public function __construct()
     {
-        $this->ghostscriptPath = env('GHOSTSCRIPT_PATH', 'C:/Program Files/gs/gs10.07.0/bin/gswin64c.exe');
+        $this->ghostscriptPath = env('GHOSTSCRIPT_PATH', '/usr/bin/gs');
         $this->apiKey = env('OPENROUTER_API_KEY');
         $this->ocrPreprocess = new OcrPreprocessService;
     }
@@ -491,7 +491,7 @@ class PdfParserService
                         'Content-Type' => 'application/json',
                     ];
                     if (! $isSnifox) {
-                        $headers['HTTP-Referer'] = 'http://localhost:8000';
+                        $headers['HTTP-Referer'] = config('app.url');
                         $headers['X-Title'] = 'Life Vest Tracker';
                     }
 
