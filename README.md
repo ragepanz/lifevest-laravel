@@ -1,112 +1,198 @@
-# 🦺 Life Vest Tracker - GMF AeroAsia
+# Life Vest Tracker - GMF AeroAsia
 
-Aplikasi pemantauan tanggal kedaluwarsa pelampung penyelamat (life vest) pesawat secara real-time untuk tim Engineering & Maintenance GMF AeroAsia.
-
----
-
-## 🛠️ Tech Stack yang Digunakan
-
-*   **PHP 8.3 & Laravel 12** - Kerangka backend utama (MVC, API, dan Database ORM).
-*   **Vite 7, Tailwind CSS v4, & Blade** - Penyusun antarmuka pengguna (UI) modern dengan Dark/Light Mode.
-*   **Ghostscript & Tesseract OCR / Google Cloud Vision** - Ekstraksi teks otomatis (OCR) dari dokumen PDF LOPA.
-*   **MySQL / SQLite** - Penyimpan data utama (pesawat, kursi, dan log audit).
-*   **Laravel Excel** - Import & export template data menggunakan Microsoft Excel (.xlsx).
+Aplikasi untuk memantau, mencatat, dan mengelola data life vest pesawat secara lebih mudah. Sistem ini membantu tim Engineering dan Maintenance melihat status kursi, tanggal kedaluwarsa, hasil scan PDF, laporan, dan data armada dalam satu tempat.
 
 ---
 
-## ✨ Fitur-Fitur Utama
+## Tech Stack
 
-1.  **Dashboard Visual Cerdas** - Grafik ringkasan status kelayakan pelampung seluruh pesawat secara real-time.
-2.  **Smart PDF Scanner (OCR AI)** - Scan PDF LOPA (Inventory Check) untuk mencatat tanggal kedaluwarsa secara otomatis.
-3.  **Peta Kursi Interaktif (Seat Map)** - Klik & pilih kursi kabin (tunggal, kolom, baris, atau massal) untuk mengubah tanggal garansi.
-4.  **Ekspor PDF & Cetak Formulir** - Cetak visual warna peta kursi pesawat atau cetak formulir kosong untuk inspeksi manual di lapangan.
-5.  **Batch Input (Salin-Tempel Massal)** - Salin data tanggal kedaluwarsa dari Excel dan tempelkan langsung ke kolom sistem.
-6.  **Audit Trail & Keamanan** - Pembatasan akses dengan 3 role (Superadmin, Admin, User) serta pencatatan otomatis setiap riwayat perubahan data.
+### Backend
+- PHP 8.3
+- Laravel 12
+- MySQL / SQLite
+- Laravel Excel
+- DomPDF
+- Tesseract OCR
+- Google Cloud Vision
+
+### Frontend
+- Blade
+- Vite
+- Tailwind CSS v4
+- Axios
+
+### Tools Pendukung
+- Composer
+- Node.js dan NPM
+- Ghostscript
+- PHPUnit
 
 ---
 
-## ⚙️ Cara Instalasi (Local Development)
+## Fitur
 
-Ikuti langkah mudah berikut untuk menjalankan aplikasi di komputer Anda:
+### 1. Dashboard
+- Ringkasan status life vest per pesawat
+- Filter data berdasarkan registrasi, airline, tipe pesawat, status, dan kesehatan
+- Ringkasan replacement plan per part number
+- Statistik cepat untuk memantau kondisi armada
 
-### 1. Prasyarat System
-Pastikan komputer Anda sudah terinstal:
-*   [PHP >= 8.2](https://www.php.net/)
-*   [Composer](https://getcomposer.org/)
-*   [Node.js & NPM](https://nodejs.org/)
-*   [Ghostscript](https://www.ghostscript.com/) (diperlukan untuk fungsi Scanner PDF)
+### 2. Peta Kursi Pesawat
+- Tampilan seat map yang interaktif
+- Pilih satu kursi, banyak kursi, satu baris, satu kolom, atau semua kursi sekaligus
+- Ubah tanggal kedaluwarsa secara massal
+- Simpan perubahan langsung ke database
+- Tersedia shortcut keyboard untuk mempercepat kerja
 
-### 2. Kloning & Masuk ke Folder Proyek
+### 3. Smart PDF Scanner
+- Upload PDF atau gambar hasil scan
+- Sistem membaca data secara otomatis dengan OCR
+- Hasil scan bisa direview sebelum disimpan
+- Data bisa diekspor ke Excel
+- Hasil scan bisa langsung disimpan ke database
+- Menampilkan gambar asli scan untuk perbandingan manual
+
+### 4. Bulk Import
+- Import data aircraft, seat, dan user dari spreadsheet
+- Mendukung file XLSX dan CSV
+- Tersedia template import resmi
+- Membantu input data dalam jumlah besar dengan cepat
+
+### 5. Export dan Report
+- Export replacement plan ke Excel
+- Export summary dashboard
+- Export activity log
+- Export data per pesawat ke PDF
+- Cetak blank form untuk inspeksi lapangan
+
+### 6. Fleet Manager
+- Kelola data aircraft
+- Kelola data airline
+- Tambah, edit, dan hapus data armada
+- Lihat daftar armada dengan filter yang mudah dipakai
+
+### 7. User Management
+- Kelola akun pengguna
+- Atur role user
+- Suspend dan unsuspend akun
+- Hapus akun jika diperlukan
+
+### 8. Profile Settings
+- Lihat informasi akun
+- Ubah password
+- Pengaturan dasar akun
+
+### 9. Audit Trail
+- Setiap perubahan data dicatat otomatis
+- Riwayat aktivitas bisa dilihat dan diekspor
+- Membantu kebutuhan pelacakan dan audit
+
+---
+
+## Cara Instalasi
+
+### 1. Persyaratan
+Pastikan komputer sudah terpasang:
+- PHP 8.2 atau lebih baru
+- Composer
+- Node.js dan NPM
+- Database MySQL atau SQLite
+- Ghostscript
+
+### 2. Clone repository
 ```bash
 git clone https://github.com/ragepanz/lifevest-laravel.git
 cd lifevest-laravel
 ```
 
-### 3. Instal Dependensi
+### 3. Install dependency
 ```bash
-# Instal library backend PHP
 composer install
-
-# Instal library frontend JavaScript
 npm install
 ```
 
-### 4. Setup Environment (.env)
+### 4. Siapkan file environment
 ```bash
-# Salin konfigurasi environment default
-cp .env.example .env
-
-# Generate security key aplikasi
+copy .env.example .env
 php artisan key:generate
 ```
-> **Catatan:** Buka file `.env` yang baru dibuat, lalu sesuaikan koneksi database (`DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`) dan path aplikasi Ghostscript (`GHOSTSCRIPT_PATH`).
 
-### 5. Jalankan Migrasi & Seeder Database
+Lalu sesuaikan isi `.env` untuk:
+- Database
+- `GHOSTSCRIPT_PATH`
+- `TESSERACT_PATH`
+- API key OCR atau AI jika dipakai
+
+### 5. Jalankan migrasi dan seeder
 ```bash
 php artisan migrate:fresh --seed
 ```
 
-### 6. Jalankan Aplikasi
-Jalankan kedua perintah ini pada dua terminal terpisah:
+### 6. Jalankan aplikasi
+Buka dua terminal:
+
 ```bash
-# Terminal 1: Menjalankan Laravel Backend
 php artisan serve
 ```
+
 ```bash
-# Terminal 2: Menjalankan Vite Frontend
 npm run dev
 ```
-Buka peramban web dan akses alamat **`http://localhost:8000`**.
+
+Akses aplikasi di:
+
+```bash
+http://localhost:8000
+```
 
 ---
 
-## 🔑 Kredensial Akun Default
+## Cara Penggunaan
 
-Gunakan salah satu akun berikut untuk masuk ke sistem:
+### Login
+Gunakan akun default dari seeder untuk masuk ke sistem.
 
-| Peran (Role) | Email | Kata Sandi (Password) |
-| :--- | :--- | :--- |
-| **Superadmin** (Hak Penuh + Kelola User) | `superadmin@tnp.com` | `superadmintnp` |
-| **Admin** (Kelola Kursi & Armada) | `admin@tnp.com` | `admintnp` |
-| **User** (Hanya Lihat & Unduh Laporan) | `user@tnp.com` | `usertnp` |
+### Melihat dashboard
+Setelah login, halaman utama akan menampilkan ringkasan kondisi armada dan status life vest.
+
+### Mengelola pesawat
+Masuk ke menu Fleet untuk melihat daftar aircraft dan airline. Admin tertentu bisa menambah, mengubah, atau menghapus data sesuai hak akses.
+
+### Mengubah data kursi
+Buka detail pesawat, pilih kursi pada seat map, lalu ubah tanggal kedaluwarsa yang diperlukan.
+
+### Menggunakan batch input
+Buka menu batch input, lalu tempel data dari Excel untuk mengisi tanggal secara massal.
+
+### Menggunakan PDF scanner
+Buka menu Smart PDF Scanner, unggah file PDF atau gambar, review hasil ekstraksi, lalu simpan ke database atau export ke Excel.
+
+### Mengelola user
+Superadmin dapat membuka menu User Management untuk membuat akun baru, mengubah role, atau suspend akun.
+
+### Mengunduh laporan
+Semua user yang punya akses bisa mengunduh laporan PDF dan Excel dari menu report yang tersedia.
 
 ---
 
-## 💡 Cara Penggunaan
+## Akun Default
 
-### A. Memperbarui Tanggal Kedaluwarsa Kursi secara Manual
-1.  Masuk ke menu **Fleet**, lalu pilih pesawat yang diinginkan (contoh: PK-GIA).
-2.  Di peta kursi interaktif, pilih kursi (klik, drag, atau pilih per baris/kolom).
-3.  Klik tombol **Set Date** atau tekan **Enter** pada keyboard.
-4.  Masukkan tanggal kedaluwarsa baru, lalu simpan.
+- Superadmin: `superadmin@tnp.com` / `superadmintnp`
+- Admin: `admin@tnp.com` / `admintnp`
+- User: `user@tnp.com` / `usertnp`
 
-### B. Memperbarui Menggunakan PDF Scanner (Otomatis)
-1.  Klik menu **Smart Scanner** di panel navigasi.
-2.  Pilih maskapai & registrasi pesawat target.
-3.  Unggah dokumen PDF LOPA berisi tanggal garansi pelampung.
-4.  Sistem AI akan mengekstrak data secara otomatis. Review hasil pembacaan lalu klik **Simpan ke Database**.
+---
 
-### C. Mencetak Formulir Inspeksi Lapangan
-1.  Buka detail pesawat di menu **Fleet**.
-2.  Klik tombol **Print Blank Form**.
-3.  Gunakan cetakan kertas tersebut untuk mencatat nomor seri dan tanggal kedaluwarsa secara manual langsung di kabin pesawat.
+## Role Akses
+
+- Superadmin: akses penuh
+- Admin: kelola data operasional sesuai izin
+- User: hanya lihat data dan unduh laporan
+
+---
+
+## Catatan Penting
+
+- Pastikan path Ghostscript dan Tesseract sesuai dengan komputer yang dipakai
+- Jika OCR tidak jalan, cek kembali konfigurasi `.env`
+- Untuk development, jalankan backend dan frontend secara bersamaan
