@@ -40,20 +40,21 @@
         <div class="navbar-container">
             <!-- Left: Logo & Back Button -->
             <div class="navbar-left">
+                <!-- Mobile Sidebar Toggle -->
+                <button type="button" class="sidebar-toggle-btn" id="sidebarToggleBtn" title="Open sidebar">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </button>
+
                 <!-- Desktop Sidebar Toggle Button -->
                 <button type="button" id="sidebarToggleDesktopBtn" class="sidebar-toggle-desktop" style="background: transparent; border: none; color: var(--text-primary); cursor: pointer; display: flex; align-items: center; justify-content: center; margin-right: 0.5rem; padding: 0.25rem;" title="Toggle Sidebar">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
                 </button>
 
-
-
                 <a href="{{ route('dashboard') }}" class="navbar-brand">
-                    <div class="navbar-logo-wrap" style="display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 8px; overflow: hidden; background: transparent;">
+                    <div class="navbar-logo-wrap" style="display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 6px; overflow: hidden; background: transparent;">
                         <img src="{{ asset('images/cabinx.jpeg') }}" alt="CabinX Logo" style="width: 100%; height: 100%; object-fit: cover;">
                     </div>
-                    <span class="navbar-title">Life Vest Tracker</span>
                 </a>
-                <span class="navbar-badge" style="margin-left:auto;">GMF AeroAsia</span>
             </div>
 
             <!-- Center: Header area -->
@@ -192,11 +193,6 @@
         <!-- Sidebar Overlay (for mobile) -->
         <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-        <!-- Sidebar Toggle Button (mobile only, visible via CSS) -->
-        <button class="sidebar-toggle-btn" id="sidebarToggleBtn" title="Open sidebar">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-        </button>
-
         <div class="app-container">
             <!-- Main Content -->
             <main class="main-content">
@@ -249,10 +245,10 @@
             });
 
             // Sidebar Mobile Toggle
-            sidebarToggleBtn?.addEventListener('click', () => {
-                sidebar.classList.add('open');
-                sidebarOverlay.classList.add('show');
-                document.body.style.overflow = 'hidden';
+            sidebarToggleBtnEl?.addEventListener('click', () => {
+                const isOpen = sidebar.classList.toggle('open');
+                sidebarOverlay.classList.toggle('show', isOpen);
+                document.body.style.overflow = isOpen ? 'hidden' : '';
             });
 
             sidebarCloseBtn?.addEventListener('click', () => {

@@ -98,10 +98,10 @@
 
     <div class="dashboard-content" style="padding-top: 0.5rem;">
         <!-- Header & Back Button Combined -->
-        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem;">
+        <div class="dashboard-header-row" style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap;">
             @if ($isFullScreenView)
                 <a href="{{ route('dashboard') }}" id="dashboard-back-btn" class="view-back-btn"
-                    style="margin-bottom: 0; padding: 0.4rem 0.75rem; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 0.35rem; text-decoration: none;">
+                    style="margin-bottom: 0; padding: 0.4rem 0.75rem; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 0.35rem; text-decoration: none; white-space: nowrap;">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                         stroke-width="2">
                         <polyline points="15 18 9 12 15 6"></polyline>
@@ -111,7 +111,7 @@
             @endif
 
             <h1 id="dashboard-main-title"
-                style="margin: 0; font-size: 1.6rem; font-weight: 800; color: var(--text-primary); letter-spacing: -0.02em;">
+                style="margin: 0; font-size: 1.4rem; font-weight: 800; color: var(--text-primary); letter-spacing: -0.02em; line-height: 1.2;">
                 @if ($currentView === 'fleet-overview' || $currentView === 'all')
                     Fleet Overview
                 @elseif ($currentView === 'life-vest-summary')
@@ -145,7 +145,7 @@
                             {{ $totalStats['safe'] }}</div>
                         <div class="summary-label">Safe</div>
                         <div class="summary-desc">More than 6 months</div>
-                        <svg width="100" height="40" viewBox="0 0 100 40"
+                        <svg class="summary-chart-svg" width="100" height="40" viewBox="0 0 100 40"
                             style="position: absolute; right: 0.5rem; bottom: 0.5rem; overflow: visible; opacity: 0.9; filter: drop-shadow(0 2px 4px rgba(16,185,129,0.4));">
                             <path d="M 0 32 C 20 30, 40 25, 60 12 C 75 4, 85 8, 100 2" stroke="var(--success)"
                                 fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -161,7 +161,7 @@
                             {{ $totalStats['warning'] }}</div>
                         <div class="summary-label">Warning</div>
                         <div class="summary-desc">3 - 6 months</div>
-                        <svg width="100" height="40" viewBox="0 0 100 40"
+                        <svg class="summary-chart-svg" width="100" height="40" viewBox="0 0 100 40"
                             style="position: absolute; right: 0.5rem; bottom: 0.5rem; overflow: visible; opacity: 0.9; filter: drop-shadow(0 2px 4px rgba(245,158,11,0.4));">
                             <path d="M 0 15 C 20 5, 35 25, 55 10 C 75 0, 85 28, 100 32" stroke="var(--warning)"
                                 fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -177,7 +177,7 @@
                             {{ $totalStats['critical'] }}</div>
                         <div class="summary-label">Critical</div>
                         <div class="summary-desc">Less than 3 months</div>
-                        <svg width="100" height="40" viewBox="0 0 100 40"
+                        <svg class="summary-chart-svg" width="100" height="40" viewBox="0 0 100 40"
                             style="position: absolute; right: 0.5rem; bottom: 0.5rem; overflow: visible; opacity: 0.9; filter: drop-shadow(0 2px 4px rgba(239,68,68,0.4));">
                             <path d="M 0 8 C 25 5, 45 32, 70 28 C 80 26, 90 35, 100 38" stroke="var(--danger)"
                                 fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -193,7 +193,7 @@
                             {{ $totalStats['expired'] }}</div>
                         <div class="summary-label">Expired</div>
                         <div class="summary-desc">Past due date</div>
-                        <svg width="100" height="40" viewBox="0 0 100 40"
+                        <svg class="summary-chart-svg" width="100" height="40" viewBox="0 0 100 40"
                             style="position: absolute; right: 0.5rem; bottom: 0.5rem; overflow: visible; opacity: 0.9; filter: drop-shadow(0 2px 4px rgba(168,85,247,0.4));">
                             <path d="M 0 28 C 15 35, 30 10, 50 20 C 70 30, 85 8, 100 5" stroke="var(--expired)"
                                 fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
