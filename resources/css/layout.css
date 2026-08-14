@@ -183,18 +183,17 @@ html[data-theme="dark"] .theme-toggle-btn-nav .moon-icon {
 
 .sidebar-toggle-btn {
     display: none;
-    position: fixed;
-    top: 12px;
-    left: 12px;
-    width: 36px;
-    height: 36px;
-    background: var(--bg-primary);
-    border: 1px solid var(--border);
-    border-radius: 6px;
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: none;
     cursor: pointer;
     color: var(--text-primary);
-    z-index: 1001;
-    transition: all var(--transition-fast);
+    z-index: 10;
+    margin-right: 0.25rem;
 }
 
 .sidebar-toggle-btn:hover {
@@ -310,11 +309,35 @@ body.sidebar-collapsed .app-container {
     }
 
     .main-content {
-        padding: 1rem;
+        padding: 0.875rem;
     }
 
     .sidebar-brand span {
         display: none;
+    }
+
+    .app-container {
+        overflow-x: hidden;
+    }
+
+    .navbar-user-name {
+        max-width: 84px;
+    }
+
+    .navbar-user-menu {
+        margin-left: 0.25rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .sidebar-nav-item,
+    .navbar-user-dropdown-item {
+        min-height: 44px;
     }
 }
 
